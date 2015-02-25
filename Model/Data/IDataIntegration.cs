@@ -53,7 +53,7 @@ namespace Model.Data
         /// array is determined by the implementation.</param>
         /// <returns>If successful, the records retrieved by the retrieve 
         /// request.  Otherwise null.</returns>
-        IDataRecordset SendDataRequest(string Command, A[] Args);
+        IDataRecordset SendDataRequest(string Command, IDataArgument[] Args);
 
         /// <summary>
         /// Sets the connection string for this integration.  This string

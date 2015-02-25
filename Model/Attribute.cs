@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Model.Data;
+
 namespace Model
 {
     /// <summary>
@@ -16,7 +18,7 @@ namespace Model
         private AttributeSchema _schema;
         private string _value;
 
-        public Attribute(AttributeSchema Schema, IDataIntegration<object, IDataRecordset> Integration)
+        public Attribute(AttributeSchema Schema, IDataIntegration Integration)
         {
             _schema = Schema;
             

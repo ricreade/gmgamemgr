@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Model.Data
 {
-    interface IDataArgument
+    public interface IDataArgument
     {
         string GetName();
         object GetValue();
