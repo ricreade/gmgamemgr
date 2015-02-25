@@ -43,8 +43,8 @@
     <Compile Include="AttributeSchema.cs" />
     <Compile Include="DataArgumentList.cs" />
     <Compile Include="DataConnector.cs" />
-    <Compile Include="Data\IDataArgument.cs" />
-    <Compile Include="Data\SqlDataArgument.cs" />
+    <Compile Include="Data\IDataParameter.cs" />
+    <Compile Include="Data\SqlDataParameter.cs" />
     <Compile Include="Data\SqlDataRecordset.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="GameObjectSchema.cs" />

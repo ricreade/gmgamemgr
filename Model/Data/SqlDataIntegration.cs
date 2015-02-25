@@ -56,7 +56,7 @@ namespace Model.Data
         /// <param name="Args">The parameter list for this command.</param>
         /// <returns>A command object ready to invoke.  If the Connection argument is
         /// null, this method returns null.</returns>
-        private SqlCommand ConfigureCommand(SqlConnection Connection, string ProcedureName, IDataArgument[] Args)
+        private SqlCommand ConfigureCommand(SqlConnection Connection, string ProcedureName, IDataParameter[] Args)
         {
             if (Connection == null)
                 return null;
@@ -90,7 +90,7 @@ namespace Model.Data
         /// <param name="Command">The name of the sql database stored procedure to call.</param>
         /// <param name="Args">The array of parameter arguments to pass to the procedure.</param>
         /// <returns>True if the request affected any records, otherwise false.</returns>
-        public bool SendActionRequest(string Command, IDataArgument[] Args)
+        public bool SendActionRequest(string Command, IDataParameter[] Args)
         {
             using (SqlConnection conn = new SqlConnection(_connstr))
             {
@@ -116,7 +116,7 @@ namespace Model.Data
         /// <param name="Command">The name of the sql database stored procedure to call.</param>
         /// <param name="Args">The array of parameter arguments to pass to the procedure.</param>
         /// <returns>A dataset containing the retrieved records.</returns>
-        public IDataRecordset SendDataRequest(string Command, IDataArgument[] Args)
+        public IDataRecordset SendDataRequest(string Command, IDataParameter[] Args)
         {
             DataSet dataset;
             using (SqlConnection conn = new SqlConnection(_connstr))

@@ -9,10 +9,7 @@ namespace Model.Data
     /// <summary>
     /// An interface representing a collection of record source data for
     /// a specific application data object.  This interface is intended to
-    /// support abstraction for varying data sources.  This interface uses two
-    /// value types:
-    ///     A - The argument type for the request.
-    ///     R - The return type for data returned by the request.
+    /// support abstraction for varying data sources.
     /// The implementation of this interface will likely
     /// be tightly coupled with the implementation of IDataRecordset,
     /// so an initiative to create once will likely necessitate a new
@@ -39,7 +36,7 @@ namespace Model.Data
         /// <param name="Args">The parameter array.  The type of this
         /// array is determined by the implementation.</param>
         /// <returns>True if the request was successful.  Otherwise false.</returns>
-        bool SendActionRequest(string Command, IDataArgument[] Args);
+        bool SendActionRequest(string Command, IDataParameter[] Args);
 
         /// <summary>
         /// Sends a retrieve request to the data source and returns the
@@ -53,7 +50,7 @@ namespace Model.Data
         /// array is determined by the implementation.</param>
         /// <returns>If successful, the records retrieved by the retrieve 
         /// request.  Otherwise null.</returns>
-        IDataRecordset SendDataRequest(string Command, IDataArgument[] Args);
+        IDataRecordset SendDataRequest(string Command, IDataParameter[] Args);
 
         /// <summary>
         /// Sets the connection string for this integration.  This string
