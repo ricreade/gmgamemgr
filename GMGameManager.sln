@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMGameManager", "GMGameMana
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{5A75C239-B38A-4205-9E83-05F7F6FBFA1B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scripting", "Scripting\Scripting.csproj", "{83351014-2D14-40FA-9CFB-DF5681997711}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{5A75C239-B38A-4205-9E83-05F7F6FBFA1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A75C239-B38A-4205-9E83-05F7F6FBFA1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A75C239-B38A-4205-9E83-05F7F6FBFA1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83351014-2D14-40FA-9CFB-DF5681997711}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83351014-2D14-40FA-9CFB-DF5681997711}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83351014-2D14-40FA-9CFB-DF5681997711}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83351014-2D14-40FA-9CFB-DF5681997711}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
