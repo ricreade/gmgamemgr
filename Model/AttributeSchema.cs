@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Model.Data;
+
 namespace Model
 {
     /// <summary>
@@ -42,6 +44,16 @@ namespace Model
             Load();
         }
 
+        /// <summary>
+        /// Instantiates an attribute schema from the specified record
+        /// collection.
+        /// </summary>
+        /// <param name="Records"></param>
+        public AttributeSchema(IDataRecordset Records)
+        {
+
+        }
+
         public void Initialize()
         {
             _id = 0;
@@ -61,6 +73,19 @@ namespace Model
         }
 
         /// <summary>
+        /// The attribute schema id.
+        /// </summary>
+        public int Id
+        {
+            get { return _id; }
+            set {
+                Initialize();
+                _id = value;
+                Load();
+            }
+        }
+
+        /// <summary>
         /// The attribute schema name.
         /// </summary>
         public string Name
@@ -73,6 +98,44 @@ namespace Model
                     _name = value;
                 }
             }
+        }
+
+        /// <summary>
+        /// Whether this attribute must be populated in the derived attribute.
+        /// </summary>
+        public bool IsRequired
+        {
+            get { return _isrequired; }
+            set { _isrequired = value; }
+        }
+
+        /// <summary>
+        /// Whether this attribute can be used as part of a value calculation.
+        /// </summary>
+        public bool IsCalcValue
+        {
+            get { return _iscalcvalue; }
+            set { _iscalcvalue = value; }
+        }
+
+        /// <summary>
+        /// The number of times this attribute can exist in the property.  A value
+        /// less than 1 is considered unlimited multiplicity.
+        /// </summary>
+        public int Multiplicity
+        {
+            get { return _multiplicity; }
+            set { _multiplicity = value; }
+        }
+
+        /// <summary>
+        /// Whether this attribute should be considered when calculating overall
+        /// GameObject statistics.
+        /// </summary>
+        public bool IsStatModifier
+        {
+            get { return _isstatmod; }
+            set { _isstatmod = value; }
         }
     }
 }

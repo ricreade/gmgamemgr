@@ -14,6 +14,15 @@ namespace Model.Data
         public SqlDataRecordset(DataSet Data)
         {
             _dataset = Data;
+            
+        }
+
+        /// <summary>
+        /// The inner dataset object.
+        /// </summary>
+        public DataSet Dataset
+        {
+            get { return _dataset; }
         }
 
         /*
