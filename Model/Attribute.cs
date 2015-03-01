@@ -18,6 +18,11 @@ namespace Model
         private AttributeSchema _schema;
         private string _value;
 
+        public Attribute(AttributeSchema Schema)
+        {
+            _schema = Schema;
+        }
+
         public Attribute(AttributeSchema Schema, IDataIntegration Integration)
         {
             _schema = Schema;
@@ -27,6 +32,7 @@ namespace Model
         public int Id
         {
             get { return _id; }
+            set { _id = value; }
         }
 
         public string Value

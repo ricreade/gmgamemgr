@@ -12,7 +12,7 @@ namespace Model.Data
     /// (the results of a database query) is used to hydrate and return the 
     /// specified object.
     /// </summary>
-    class SqlRecordsetIntegration : IRecordsetIntegration
+    public class SqlRecordsetIntegration : IRecordsetIntegration
     {
         SqlDataRecordset _rst;
         private int _attributeRow = 0;
@@ -31,6 +31,7 @@ namespace Model.Data
         public SqlRecordsetIntegration(SqlDataRecordset Recordset)
         {
             Initialize();
+            _rst = Recordset;
         }
 
         /// <summary>

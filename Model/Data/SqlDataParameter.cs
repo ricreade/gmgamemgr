@@ -15,7 +15,7 @@ namespace Model.Data
     /// constructor did not throw an exception, this base object is
     /// guaranteed to be instantiated.
     /// </summary>
-    class SqlDataParameter : IDataParameter
+    public class SqlDataParameter : IDataParameter
     {
         private SqlParameter _param;
 

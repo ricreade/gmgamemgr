@@ -51,6 +51,8 @@
     <Compile Include="DataConnector.cs" />
     <Compile Include="Data\IDataParameter.cs" />
     <Compile Include="Data\IRecordsetIntegration.cs" />
+    <Compile Include="Data\MockDataRecordset.cs" />
+    <Compile Include="Data\MockRecordsetIntegration.cs" />
     <Compile Include="Data\SqlDataParameter.cs" />
     <Compile Include="Data\SqlDataRecordset.cs" />
     <Compile Include="Data\SqlRecordsetIntegration.cs" />

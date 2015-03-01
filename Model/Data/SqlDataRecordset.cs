@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Model.Data
 {
-    class SqlDataRecordset : IDataRecordset
+    public class SqlDataRecordset : IDataRecordset
     {
         private DataSet _dataset = null;
 
