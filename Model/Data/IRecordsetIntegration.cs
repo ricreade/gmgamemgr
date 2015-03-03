@@ -15,47 +15,48 @@ namespace Model.Data
     /// </summary>
     interface IRecordsetIntegration
     {
-        /// <summary>
-        /// Fills an Attribute object using values stored in the integration
-        /// data source.
-        /// </summary>
-        /// <param name="Object">The attribute object to hydrate.</param>
-        Attribute FillAttribute(Attribute Attr);
 
         /// <summary>
-        /// Fills an AttributeSchema object using values stored in the integration
-        /// data source.
+        /// Constructs an attribute dictionary based on the record data stored
+        /// in the integration data source.
         /// </summary>
-        /// <param name="Object">The attribute schema object to hydrate.</param>
-        AttributeSchema FillAttributeSchema(AttributeSchema AttrSchema);
+        /// <returns>A dictionary of attribute objects.</returns>
+        Dictionary<int, Attribute> BuildAttributeDictionary();
 
         /// <summary>
-        /// Fills a GameObject object using values stored in the integration
-        /// data source.
+        /// Constructs an attribute schema dictionary based on the record data
+        /// stored in the integration data source.
         /// </summary>
-        /// <param name="Object">The game object to hydrate.</param>
-        GameObject FillGameObject(GameObject GameObj);
+        /// <returns>A dictionary of attribute schema objects.</returns>
+        Dictionary<int, AttributeSchema> BuildAttributeSchemaDictionary();
 
         /// <summary>
-        /// Fills a GameObjectSchema object using the values stored in the
-        /// integration data source.
+        /// Constructs a game object dictionary based on the record data stored
+        /// in the integration data source.
         /// </summary>
-        /// <param name="Object">The game object schema to hydrate.</param>
-        GameObjectSchema FillGameObjectSchema(GameObjectSchema GameObjSchema);
+        /// <returns>A dictionary of game object objects.</returns>
+        Dictionary<int, GameObject> BuildGameObjectDictionary();
 
         /// <summary>
-        /// Fills a Property object using the values stored in the integration
-        /// data source.
+        /// Constructs a game object schema dictionary based on the record
+        /// data stored in the integration data source.
         /// </summary>
-        /// <param name="Object">The property to hydrate.</param>
-        Property FillProperty(Property Prop);
+        /// <returns>A dictionary of game object schema objects.</returns>
+        Dictionary<int, GameObjectSchema> BuildGameObjectSchemaDictionary();
 
         /// <summary>
-        /// Fills a PropertySchema object using the values stored in the integration
-        /// data source.
+        /// Constructs a property dictionary based on the record data stored
+        /// in the integration data source.
         /// </summary>
-        /// <param name="Object">The property schema to hydrate.</param>
-        PropertySchema FillPropertySchema(PropertySchema PropSchema);
+        /// <returns>A dictionary of property objects.</returns>
+        Dictionary<int, Property> BuildPropertyDictionary();
+
+        /// <summary>
+        /// Constructs a property schema dictionary based on the record data
+        /// stored in the integration data source.
+        /// </summary>
+        /// <returns>A dictionary of property schema objects.</returns>
+        Dictionary<int, PropertySchema> BuildPropertySchemaDictionary();
 
         /// <summary>
         /// Initializes (or reinitializes) the integration to default values.  This

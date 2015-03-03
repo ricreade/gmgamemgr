@@ -102,42 +102,34 @@ namespace Model.Data
             return AttrSchema;
         }
 
-        /// <summary>
-        /// Fills a game object with values stored in the stored SQL recordset.
-        /// </summary>
-        /// <param name="GameObj">The game object to hydrate.</param>
-        /// <returns>The hydrated game object.</returns>
-        public GameObject FillGameObject(GameObject GameObj)
+
+
+        public Dictionary<int, Attribute> BuildAttributeDictionary()
         {
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Fills a game object schema with values stored in the stored SQL recordset.
-        /// </summary>
-        /// <param name="GameObjSchema">The game object schema to hydrate.</param>
-        /// <returns>The hydrated game object schema.</returns>
-        public GameObjectSchema FillGameObjectSchema(GameObjectSchema GameObjSchema)
+        public Dictionary<int, AttributeSchema> BuildAttributeSchemaDictionary()
         {
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Fills a property with values stored in the stored SQL recordset.
-        /// </summary>
-        /// <param name="Prop">The property to hydrate.</param>
-        /// <returns>The hydrated property.</returns>
-        public Property FillProperty(Property Prop)
+        public Dictionary<int, GameObject> BuildGameObjectDictionary()
         {
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Fills a property schema with values stored in the stored SQL recordset.
-        /// </summary>
-        /// <param name="PropSchema">The property schema to hydrate.</param>
-        /// <returns>The hydrated property schema.</returns>
-        public PropertySchema FillPropertySchema(PropertySchema PropSchema)
+        public Dictionary<int, GameObjectSchema> BuildGameObjectSchemaDictionary()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Dictionary<int, Property> BuildPropertyDictionary()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Dictionary<int, PropertySchema> BuildPropertySchemaDictionary()
         {
             throw new NotImplementedException();
         }
