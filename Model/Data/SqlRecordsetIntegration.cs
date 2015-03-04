@@ -76,7 +76,7 @@ namespace Model.Data
         /// </summary>
         /// <param name="Attr">The attribute to hydrate.</param>
         /// <returns>The hydrated attribute.</returns>
-        public Attribute FillAttribute(Attribute Attr)
+        public AttributeItem FillAttribute(AttributeItem Attr)
         {
             throw new NotImplementedException();
         }
@@ -104,7 +104,7 @@ namespace Model.Data
 
 
 
-        public Dictionary<int, Attribute> BuildAttributeDictionary()
+        public Dictionary<int, AttributeItem> BuildAttributeDictionary()
         {
             throw new NotImplementedException();
         }

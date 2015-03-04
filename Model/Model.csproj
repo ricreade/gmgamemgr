@@ -45,7 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attribute.cs" />
+    <Compile Include="AttributeItem.cs" />
     <Compile Include="AttributeSchema.cs" />
     <Compile Include="DataArgumentList.cs" />
     <Compile Include="DataConnector.cs" />
@@ -53,6 +53,7 @@
     <Compile Include="Data\IRecordsetIntegration.cs" />
     <Compile Include="Data\MockDataRecordset.cs" />
     <Compile Include="Data\MockRecordsetIntegration.cs" />
+    <Compile Include="Data\RecordsetIntegration.cs" />
     <Compile Include="Data\SqlDataParameter.cs" />
     <Compile Include="Data\SqlDataRecordset.cs" />
     <Compile Include="Data\SqlRecordsetIntegration.cs" />

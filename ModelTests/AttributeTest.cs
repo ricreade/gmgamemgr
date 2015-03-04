@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Model;
@@ -15,9 +16,11 @@ namespace ModelTests
         {
             MockRecordsetIntegration integration = new MockRecordsetIntegration(new MockDataRecordset());
 
-            Model.Attribute ability = integration.FillAttribute(null);
-            Model.Attribute bonus = integration.FillAttribute(null);
-            Model.Attribute description = integration.FillAttribute(null);
+            Dictionary<int, AttributeItem> attrdict = integration.BuildAttributeDictionary();
+
+            AttributeItem ability = attrdict[1];
+            AttributeItem bonus = attrdict[2];
+            AttributeItem description = attrdict[3];
 
             Assert.AreEqual<int>(1, ability.Id);
             Assert.AreEqual<int>(1, ability.Schema.Id);

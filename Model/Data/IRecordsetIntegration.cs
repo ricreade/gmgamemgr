@@ -21,7 +21,7 @@ namespace Model.Data
         /// in the integration data source.
         /// </summary>
         /// <returns>A dictionary of attribute objects.</returns>
-        Dictionary<int, Attribute> BuildAttributeDictionary();
+        Dictionary<int, AttributeItem> BuildAttributeDictionary();
 
         /// <summary>
         /// Constructs an attribute schema dictionary based on the record data

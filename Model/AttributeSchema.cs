@@ -22,6 +22,14 @@ namespace Model
         private bool _isstatmod;
 
         /// <summary>
+        /// Instantiates a new empty attribute schema.
+        /// </summary>
+        public AttributeSchema()
+        {
+            Initialize();
+        }
+
+        /// <summary>
         /// Instantiates a new attribute schema with the specified name.
         /// </summary>
         /// <param name="Name">The name of the new attribute schema.</param>

@@ -11,7 +11,7 @@ namespace Model
         private int _id;
         private string _name;
         private PropertySchema _schema;
-        private Dictionary<string, Attribute> _attrs;
+        private Dictionary<string, AttributeItem> _attrs;
 
         /// <summary>
         /// Instantiates a new property based on the specified schema.  The property
@@ -55,7 +55,7 @@ namespace Model
         /// <summary>
         /// The attributes dictionary.
         /// </summary>
-        public Dictionary<string, Attribute> Attributes
+        public Dictionary<string, AttributeItem> Attributes
         {
             get { return _attrs; }
         }
@@ -99,7 +99,7 @@ namespace Model
             _id = 0;
             _name = "";
             _schema = null;
-            _attrs = new Dictionary<string, Attribute>();
+            _attrs = new Dictionary<string, AttributeItem>();
         }
 
         /// <summary>
