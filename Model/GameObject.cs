@@ -17,6 +17,7 @@ namespace Model
     {
         int _id;
         private GameObjectSchema _schema;
+        private Dictionary<int, Property> _props;
         private string _name;
 
         /// <summary>
@@ -66,6 +67,12 @@ namespace Model
         public int Id
         {
             get { return _id; }
+            set { _id = value; }
+        }
+
+        public Dictionary<int, Property> Properties
+        {
+            get { return _props; }
         }
 
         /// <summary>
@@ -76,6 +83,7 @@ namespace Model
             _id = 0;
             _schema = null;
             _name = "";
+            _props = new Dictionary<int, Property>();
         }
 
         /// <summary>

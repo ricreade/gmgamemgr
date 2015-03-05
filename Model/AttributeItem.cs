@@ -17,6 +17,7 @@ namespace Model
         private int _id;
         private AttributeSchema _schema;
         private string _value;
+        private int _propid;
 
         public AttributeItem(AttributeSchema Schema)
         {
@@ -33,6 +34,12 @@ namespace Model
         {
             get { return _id; }
             set { _id = value; }
+        }
+
+        public int PropertyId
+        {
+            get { return _propid; }
+            set { _propid = value; }
         }
 
         public string Value

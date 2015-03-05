@@ -16,7 +16,12 @@ namespace Model
     {
         private int _id;
         private string _name;
-        private Dictionary<string, PropertySchema> _propschemas;
+        private Dictionary<int, PropertySchema> _propschemas;
+
+        public GameObjectSchema()
+        {
+            Initialize();
+        }
 
         /// <summary>
         /// Instantiates a new game object schema with no properties and the
@@ -48,7 +53,7 @@ namespace Model
         {
             _id = 0;
             _name = "";
-            _propschemas = new Dictionary<string, PropertySchema>();
+            _propschemas = new Dictionary<int, PropertySchema>();
         }
 
         /// <summary>
@@ -57,6 +62,7 @@ namespace Model
         public int Id
         {
             get { return _id; }
+            set { _id = value; }
         }
 
         /// <summary>
@@ -88,7 +94,7 @@ namespace Model
         /// <summary>
         /// A collection of all property schemas that define this object.
         /// </summary>
-        public Dictionary<string, PropertySchema> PropertySchemas
+        public Dictionary<int, PropertySchema> PropertySchemas
         {
             get { return _propschemas; }
         }

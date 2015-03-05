@@ -20,6 +20,7 @@ namespace Model
         private bool _iscalcvalue;
         private int _multiplicity;
         private bool _isstatmod;
+        private int _propschid;
 
         /// <summary>
         /// Instantiates a new empty attribute schema.
@@ -70,6 +71,7 @@ namespace Model
             _iscalcvalue = false;
             _multiplicity = 1;
             _isstatmod = false;
+            _propschid = 0;
         }
 
         /// <summary>
@@ -144,6 +146,12 @@ namespace Model
         {
             get { return _isstatmod; }
             set { _isstatmod = value; }
+        }
+
+        public int PropertySchemaId
+        {
+            get { return _propschid; }
+            set { _propschid = value; }
         }
     }
 }

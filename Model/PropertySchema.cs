@@ -16,8 +16,13 @@ namespace Model
     {
         private int _id;
         private string _name;
-        private bool _isrequired;
-        private Dictionary<string, AttributeSchema> _attrschemas;
+        private Dictionary<int, AttributeSchema> _attrschemas;
+        private int _gameobjschid;
+
+        public PropertySchema()
+        {
+            Initialize();
+        }
 
         /// <summary>
         /// Constructor.  Initializes a property schema with the specified object id,
@@ -43,12 +48,24 @@ namespace Model
             _name = Name;
         }
 
+        public Dictionary<int, AttributeSchema> AttributeSchemas
+        {
+            get { return _attrschemas; }
+        }
+
+        public int GameObjectSchemaId
+        {
+            get { return _gameobjschid; }
+            set { _gameobjschid = value; }
+        }
+
         /// <summary>
         /// The property schema id.
         /// </summary>
         public int Id
         {
             get { return _id; }
+            set { _id = value; }
         }
 
         /// <summary>
@@ -58,8 +75,7 @@ namespace Model
         {
             _id = 0;
             _name = "";
-            _isrequired = false;
-            _attrschemas = new Dictionary<string, AttributeSchema>();
+            _attrschemas = new Dictionary<int, AttributeSchema>();
         }
 
         /// <summary>

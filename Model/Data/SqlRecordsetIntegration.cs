@@ -12,15 +12,8 @@ namespace Model.Data
     /// (the results of a database query) is used to hydrate and return the 
     /// specified object.
     /// </summary>
-    public class SqlRecordsetIntegration : IRecordsetIntegration
+    public class SqlRecordsetIntegration : RecordsetIntegration
     {
-        SqlDataRecordset _rst;
-        private int _attributeRow = 0;
-        private int _attributeSchemaRow = 0;
-        private int _gameObjectRow = 0;
-        private int _gameObjectSchemaRow = 0;
-        private int _propertyRow = 0;
-        private int _propertySchemaRow = 0;
 
         /// <summary>
         /// Initializes the integration with the specified data recordset
@@ -28,10 +21,9 @@ namespace Model.Data
         /// </summary>
         /// <param name="Recordset">The collection of records that will be
         /// used to hydrate all data objects.</param>
-        public SqlRecordsetIntegration(SqlDataRecordset Recordset)
+        public SqlRecordsetIntegration(SqlDataRecordset Recordset) : base(Recordset)
         {
             Initialize();
-            _rst = Recordset;
         }
 
         /// <summary>
@@ -39,8 +31,11 @@ namespace Model.Data
         /// </summary>
         private struct AttributeFields
         {
+            public const string Table = "Attributes";
             public const string Id = "AttributeId";
-
+            public const string AttributeSchemaId = "AttributeSchemaId";
+            public const string PropertyId = "PropertyId";
+            public const string Value = "Value";
         }
 
         /// <summary>
@@ -50,6 +45,7 @@ namespace Model.Data
         {
             public const string Table = "AttributeSchemas";
             public const string Id = "AttributeSchemaId";
+            public const string PropertySchemaId = "PropertySchemaId";
             public const string Name = "Name";
             public const string IsRequired = "IsRequired";
             public const string IsCalcValue = "IsCalcValue";
@@ -57,17 +53,36 @@ namespace Model.Data
             public const string Multiplicity = "Multiplicity";
         }
 
-        /// <summary>
-        /// Initializes (or reinitializes) active table row references.
-        /// </summary>
-        public void Initialize()
+        private struct GameObjectNames
         {
-            _attributeRow = 0;
-            _attributeSchemaRow = 0;
-            _gameObjectRow = 0;
-            _gameObjectSchemaRow = 0;
-            _propertyRow = 0;
-            _propertySchemaRow = 0;
+            public const string Table = "GameObjects";
+            public const string Id = "GameObjectId";
+            public const string Name = "Name";
+            public const string GameObjectSchemaId = "GameObjectSchemaId";
+        }
+
+        private struct GameObjectSchemaNames
+        {
+            public const string Table = "GameObjectSchemas";
+            public const string Id = "GameObjectSchemaId";
+            public const string Name = "Name";
+        }
+
+        private struct PropertyNames
+        {
+            public const string Table = "Properties";
+            public const string Id = "PropertyId";
+            public const string PropertySchemaId = "PropertySchemaId";
+            public const string GameObjectId = "GameObjectId";
+            public const string Name = "Name";
+        }
+
+        private struct PropertySchemaNames
+        {
+            public const string Table = "PropertySchemas";
+            public const string Id = "PropertySchemaId";
+            public const string GameObjectSchemaId = "GameObjectSchemaId";
+            public const string Name = "Name";
         }
 
         /// <summary>
@@ -76,9 +91,16 @@ namespace Model.Data
         /// </summary>
         /// <param name="Attr">The attribute to hydrate.</param>
         /// <returns>The hydrated attribute.</returns>
-        public AttributeItem FillAttribute(AttributeItem Attr)
+        private AttributeItem FillAttribute(DataRow Fields)
         {
-            throw new NotImplementedException();
+            int schemaId = (int)Fields[AttributeFields.AttributeSchemaId];
+
+            AttributeItem attr = new AttributeItem(_attrschlist[schemaId]);
+            attr.Id = (int)Fields[AttributeFields.Id];
+            attr.Value = Fields[AttributeFields.Value].ToString();
+            attr.PropertyId = (int)Fields[AttributeFields.PropertyId];
+
+            return attr;
         }
 
         /// <summary>
@@ -87,51 +109,218 @@ namespace Model.Data
         /// </summary>
         /// <param name="AttrSchema">The attribute schema to hydrate.</param>
         /// <returns>The hydrated attribute schema.</returns>
-        public AttributeSchema FillAttributeSchema(AttributeSchema AttrSchema)
+        private AttributeSchema FillAttributeSchema(DataRow Fields)
         {
-            
-            DataTable table = _rst.Dataset.Tables[AttributeSchemaNames.Table];
-            AttrSchema.Id = (int)table.Rows[_attributeSchemaRow][AttributeSchemaNames.Id];
-            AttrSchema.Name = (string)table.Rows[_attributeSchemaRow][AttributeSchemaNames.Name];
-            AttrSchema.IsRequired = (bool)table.Rows[_attributeSchemaRow][AttributeSchemaNames.IsRequired];
-            AttrSchema.IsCalcValue = (bool)table.Rows[_attributeSchemaRow][AttributeSchemaNames.IsCalcValue];
-            AttrSchema.IsStatModifier = (bool)table.Rows[_attributeSchemaRow][AttributeSchemaNames.IsStatMod];
-            AttrSchema.Multiplicity = (int)table.Rows[_attributeSchemaRow][AttributeSchemaNames.Multiplicity];
-            _attributeSchemaRow++;
+            AttributeSchema attrsch = new AttributeSchema();
 
-            return AttrSchema;
+            attrsch.Id = (int)Fields[AttributeSchemaNames.Id];
+            attrsch.Name = Fields[AttributeSchemaNames.Name].ToString();
+            attrsch.IsRequired = (bool)Fields[AttributeSchemaNames.IsRequired];
+            attrsch.IsCalcValue = (bool)Fields[AttributeSchemaNames.IsCalcValue];
+            attrsch.IsStatModifier = (bool)Fields[AttributeSchemaNames.IsCalcValue];
+            attrsch.Multiplicity = (int)Fields[AttributeSchemaNames.Multiplicity];
+            attrsch.PropertySchemaId = (int)Fields[AttributeSchemaNames.PropertySchemaId];
+
+            return attrsch;
         }
 
-
-
-        public Dictionary<int, AttributeItem> BuildAttributeDictionary()
+        public GameObject FillGameObject(DataRow Fields)
         {
-            throw new NotImplementedException();
+            int schemaId = (int)Fields[GameObjectNames.GameObjectSchemaId];
+
+            GameObject g = new GameObject(_gameobjschlist[schemaId]);
+            g.Id = (int)Fields[GameObjectNames.Id];
+            g.Name = Fields[GameObjectNames.Name].ToString();
+
+            IEnumerable<Property> props = _proplist.Values.Where(prop => prop.GameObjectId == g.Id);
+            foreach (Property p in props)
+            {
+                g.Properties.Add(p.Id, p);
+            }
+
+            return g;
         }
 
-        public Dictionary<int, AttributeSchema> BuildAttributeSchemaDictionary()
+        public GameObjectSchema FillGameObjectSchema(DataRow Fields)
         {
-            throw new NotImplementedException();
+            GameObjectSchema gos = new GameObjectSchema();
+            gos.Id = (int)Fields[GameObjectSchemaNames.Id];
+            gos.Name = Fields[GameObjectSchemaNames.Name].ToString();
+
+            IEnumerable<PropertySchema> propschs = _propschlist.Values.Where(prop => prop.GameObjectSchemaId == gos.Id);
+            foreach (PropertySchema p in propschs)
+            {
+                gos.PropertySchemas.Add(p.Id, p);
+            }
+
+            return gos;
         }
 
-        public Dictionary<int, GameObject> BuildGameObjectDictionary()
+        private Property FillProperty(DataRow Fields)
         {
-            throw new NotImplementedException();
+            int schemaId = (int)Fields[PropertyNames.PropertySchemaId];
+
+            Property prop = new Property(_propschlist[schemaId]);
+            prop.Id = (int)Fields[PropertyNames.Id];
+            prop.Name = Fields[PropertyNames.Name].ToString();
+            prop.GameObjectId = (int)Fields[PropertyNames.GameObjectId];
+
+            IEnumerable<AttributeItem> attrs = _attrlist.Values.Where(attr => attr.PropertyId == prop.Id);
+            foreach (AttributeItem a in attrs)
+            {
+                prop.Attributes.Add(a.Id, a);
+            }
+
+            return prop;
         }
 
-        public Dictionary<int, GameObjectSchema> BuildGameObjectSchemaDictionary()
+        private PropertySchema FillPropertySchema(DataRow Fields)
         {
-            throw new NotImplementedException();
+            PropertySchema propsch = new PropertySchema();
+
+            propsch.Id = (int)Fields[PropertySchemaNames.Id];
+            propsch.Name = Fields[PropertySchemaNames.Name].ToString();
+            propsch.GameObjectSchemaId = (int)Fields[PropertySchemaNames.GameObjectSchemaId];
+
+            IEnumerable<AttributeSchema> attrschs = _attrschlist.Values.Where(attr => attr.PropertySchemaId == propsch.Id);
+            foreach (AttributeSchema a in attrschs)
+            {
+                propsch.AttributeSchemas.Add(a.Id, a);
+            }
+
+            return propsch;
         }
 
-        public Dictionary<int, Property> BuildPropertyDictionary()
+        public override Dictionary<int, AttributeItem> BuildAttributeDictionary()
         {
-            throw new NotImplementedException();
+            if (_attrlist.Values.Count > 0) { return _attrlist; }
+            if (_attrschlist.Values.Count == 0)
+            {
+                BuildAttributeSchemaDictionary();
+            }
+
+            AttributeItem a;
+            DataTable table = ((SqlDataRecordset)_rst).Dataset.Tables[AttributeFields.Table];
+
+            for (int i = 0; i < table.Rows.Count; i++)
+            {
+                a = FillAttribute(table.Rows[i]);
+                _attrlist.Add(a.Id, a);
+            }
+
+            return _attrlist;
         }
 
-        public Dictionary<int, PropertySchema> BuildPropertySchemaDictionary()
+        public override Dictionary<int, AttributeSchema> BuildAttributeSchemaDictionary()
         {
-            throw new NotImplementedException();
+            if (_attrschlist.Values.Count > 0) { return _attrschlist; }
+
+            AttributeSchema a;
+            DataTable table = ((SqlDataRecordset)_rst).Dataset.Tables[AttributeSchemaNames.Table];
+
+            for (int i = 0; i < table.Rows.Count; i++)
+            {
+                a = FillAttributeSchema(table.Rows[i]);
+                _attrschlist.Add(a.Id, a);
+            }
+
+            return _attrschlist;
+        }
+
+        public override Dictionary<int, GameObject> BuildGameObjectDictionary()
+        {
+            if (_gameobjlist.Values.Count > 0) { return _gameobjlist; }
+            if (_gameobjschlist.Values.Count == 0)
+            {
+                BuildGameObjectSchemaDictionary();
+            }
+            if (_proplist.Values.Count == 0)
+            {
+                BuildPropertyDictionary();
+            }
+
+            GameObject g;
+            DataTable table = ((SqlDataRecordset)_rst).Dataset.Tables[GameObjectNames.Table];
+
+            for (int i = 0; i < table.Rows.Count; i++)
+            {
+                g = FillGameObject(table.Rows[i]);
+                _gameobjlist.Add(g.Id, g);
+            }
+
+            return _gameobjlist;
+        }
+
+        public override Dictionary<int, GameObjectSchema> BuildGameObjectSchemaDictionary()
+        {
+            if (_gameobjschlist.Values.Count > 0) { return _gameobjschlist; }
+            if (_propschlist.Values.Count == 0)
+            {
+                BuildPropertySchemaDictionary();
+            }
+
+            GameObjectSchema g;
+            DataTable table = ((SqlDataRecordset)_rst).Dataset.Tables[GameObjectSchemaNames.Table];
+
+            for (int i = 0; i < table.Rows.Count; i++)
+            {
+                g = FillGameObjectSchema(table.Rows[i]);
+                _gameobjschlist.Add(g.Id, g);
+            }
+
+            return _gameobjschlist;
+        }
+
+        public override Dictionary<int, Property> BuildPropertyDictionary()
+        {
+            if (_proplist.Values.Count > 0) { return _proplist; }
+            if (_propschlist.Values.Count == 0)
+            {
+                BuildPropertySchemaDictionary();
+            } 
+            if (_attrlist.Values.Count == 0)
+            {
+                BuildAttributeDictionary();
+            }
+
+            Property p;
+            DataTable table = ((SqlDataRecordset)_rst).Dataset.Tables[PropertyNames.Table];
+
+            for (int i = 0; i < table.Rows.Count; i++)
+            {
+                p = FillProperty(table.Rows[i]);
+                _proplist.Add(p.Id, p);
+            }
+
+            return _proplist;
+        }
+
+        public override Dictionary<int, PropertySchema> BuildPropertySchemaDictionary()
+        {
+            if (_propschlist.Values.Count > 0) { return _propschlist; }
+            if (_attrschlist.Values.Count == 0)
+            {
+                BuildAttributeSchemaDictionary();
+            }
+
+            PropertySchema p;
+            DataTable table = ((SqlDataRecordset)_rst).Dataset.Tables[PropertySchemaNames.Table];
+
+            for (int i = 0; i < table.Rows.Count; i++)
+            {
+                p = FillPropertySchema(table.Rows[i]);
+                _propschlist.Add(p.Id, p);
+            }
+
+            return _propschlist;
+        }
+
+        public override void Initialize()
+        {
+            _attrlist = new Dictionary<int, AttributeItem>();
+            _attrschlist = new Dictionary<int, AttributeSchema>();
+            _proplist = new Dictionary<int, Property>();
+            _propschlist = new Dictionary<int, PropertySchema>();
         }
     }
 }

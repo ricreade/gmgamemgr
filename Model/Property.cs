@@ -11,7 +11,8 @@ namespace Model
         private int _id;
         private string _name;
         private PropertySchema _schema;
-        private Dictionary<string, AttributeItem> _attrs;
+        private Dictionary<int, AttributeItem> _attrs;
+        private int _gameobjid;
 
         /// <summary>
         /// Instantiates a new property based on the specified schema.  The property
@@ -55,9 +56,15 @@ namespace Model
         /// <summary>
         /// The attributes dictionary.
         /// </summary>
-        public Dictionary<string, AttributeItem> Attributes
+        public Dictionary<int, AttributeItem> Attributes
         {
             get { return _attrs; }
+        }
+
+        public int GameObjectId
+        {
+            get { return _gameobjid; }
+            set { _gameobjid = value; }
         }
 
         /// <summary>
@@ -66,6 +73,7 @@ namespace Model
         public int Id
         {
             get { return _id; }
+            set { _id = value; }
         }
 
         /// <summary>
@@ -99,7 +107,7 @@ namespace Model
             _id = 0;
             _name = "";
             _schema = null;
-            _attrs = new Dictionary<string, AttributeItem>();
+            _attrs = new Dictionary<int, AttributeItem>();
         }
 
         /// <summary>
