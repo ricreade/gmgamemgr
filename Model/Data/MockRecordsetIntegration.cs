@@ -27,8 +27,6 @@ namespace Model.Data
             public const string Id = "AttributeSchemaId";
             public const string Name = "Name";
             public const string IsRequired = "IsRequired";
-            public const string IsCalcValue = "IsCalcValue";
-            public const string IsStatMod = "IsStatMod";
             public const string Multiplicity = "Multiplicity";
         }
 
@@ -50,9 +48,7 @@ namespace Model.Data
             attrsch = new AttributeSchema();
             attrsch.Id = Int32.Parse(Fields[AttributeSchemaNames.Id]);
             attrsch.Name = Fields[AttributeSchemaNames.Name];
-            attrsch.IsCalcValue = Boolean.Parse(Fields[AttributeSchemaNames.IsCalcValue]);
             attrsch.IsRequired = Boolean.Parse(Fields[AttributeSchemaNames.IsRequired]);
-            attrsch.IsStatModifier = Boolean.Parse(Fields[AttributeSchemaNames.IsStatMod]);
             attrsch.Multiplicity = Int32.Parse(Fields[AttributeSchemaNames.Multiplicity]);
 
             return attrsch;
@@ -116,6 +112,16 @@ namespace Model.Data
         {
             _attrschlist = new Dictionary<int, AttributeSchema>();
             _attrlist = new Dictionary<int, AttributeItem>();
+        }
+
+        public override Dictionary<int, GameObjectProperties> BuildGameObjectPropertiesDictionary()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Dictionary<int, GameObjectPropertySchemas> BuildGameObjectPropertySchemasDictionary()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -17,9 +17,7 @@ namespace Model
         private int _id;
         private string _name;
         private bool _isrequired;
-        private bool _iscalcvalue;
         private int _multiplicity;
-        private bool _isstatmod;
         private int _propschid;
 
         /// <summary>
@@ -54,23 +52,15 @@ namespace Model
         }
 
         /// <summary>
-        /// Instantiates an attribute schema from the specified record
-        /// collection.
+        /// Initializes the attribute schema internal fields to their default
+        /// value.
         /// </summary>
-        /// <param name="Records"></param>
-        public AttributeSchema(IDataRecordset Records)
-        {
-
-        }
-
         public void Initialize()
         {
             _id = 0;
             _name = "";
             _isrequired = false;
-            _iscalcvalue = false;
             _multiplicity = 1;
-            _isstatmod = false;
             _propschid = 0;
         }
 
@@ -120,15 +110,6 @@ namespace Model
         }
 
         /// <summary>
-        /// Whether this attribute can be used as part of a value calculation.
-        /// </summary>
-        public bool IsCalcValue
-        {
-            get { return _iscalcvalue; }
-            set { _iscalcvalue = value; }
-        }
-
-        /// <summary>
         /// The number of times this attribute can exist in the property.  A value
         /// less than 1 is considered unlimited multiplicity.
         /// </summary>
@@ -139,15 +120,9 @@ namespace Model
         }
 
         /// <summary>
-        /// Whether this attribute should be considered when calculating overall
-        /// GameObject statistics.
+        /// The id of the parent property schema.  This value supports reconstruction
+        /// of the property tree after data has been pull en mass from the database.
         /// </summary>
-        public bool IsStatModifier
-        {
-            get { return _isstatmod; }
-            set { _isstatmod = value; }
-        }
-
         public int PropertySchemaId
         {
             get { return _propschid; }

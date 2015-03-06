@@ -55,6 +55,11 @@ namespace Model.Data
         /// <returns>A dictionary of game object schema objects.</returns>
         public abstract Dictionary<int, GameObjectSchema> BuildGameObjectSchemaDictionary();
 
+
+        public abstract Dictionary<int, GameObjectProperties> BuildGameObjectPropertiesDictionary();
+
+        public abstract Dictionary<int, GameObjectPropertySchemas> BuildGameObjectPropertySchemasDictionary();
+
         /// <summary>
         /// Constructs a property dictionary based on the record data stored
         /// in the integration data source.

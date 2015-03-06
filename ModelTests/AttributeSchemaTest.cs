@@ -24,22 +24,16 @@ namespace ModelTests
             Assert.AreEqual<int>(1, ability.Id);
             Assert.AreEqual<string>("ability", ability.Name);
             Assert.AreEqual<bool>(true, ability.IsRequired);
-            Assert.AreEqual<bool>(false, ability.IsCalcValue);
-            Assert.AreEqual<bool>(false, ability.IsStatModifier);
             Assert.AreEqual<int>(1, ability.Multiplicity);
             
             Assert.AreEqual<int>(2, bonus.Id);
             Assert.AreEqual<string>("bonus", bonus.Name);
             Assert.AreEqual<bool>(true, bonus.IsRequired);
-            Assert.AreEqual<bool>(false, bonus.IsCalcValue);
-            Assert.AreEqual<bool>(false, bonus.IsStatModifier);
             Assert.AreEqual<int>(1, bonus.Multiplicity);
 
             Assert.AreEqual<int>(3, description.Id);
             Assert.AreEqual<string>("description", description.Name);
             Assert.AreEqual<bool>(false, description.IsRequired);
-            Assert.AreEqual<bool>(false, description.IsCalcValue);
-            Assert.AreEqual<bool>(false, description.IsStatModifier);
             Assert.AreEqual<int>(1, description.Multiplicity);
         }
     }

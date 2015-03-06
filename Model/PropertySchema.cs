@@ -18,6 +18,7 @@ namespace Model
         private string _name;
         private Dictionary<int, AttributeSchema> _attrschemas;
         private int _gameobjschid;
+        private bool _issummaryprop;
 
         public PropertySchema()
         {
@@ -53,6 +54,9 @@ namespace Model
             get { return _attrschemas; }
         }
 
+        /// <summary>
+        /// The id of the game object that owns this property.
+        /// </summary>
         public int GameObjectSchemaId
         {
             get { return _gameobjschid; }
@@ -76,6 +80,17 @@ namespace Model
             _id = 0;
             _name = "";
             _attrschemas = new Dictionary<int, AttributeSchema>();
+        }
+
+        /// <summary>
+        /// Whether this property should be loaded when the application
+        /// starts up because it contains information that needs to be
+        /// available to represent the game object in a summary table.
+        /// </summary>
+        public bool IsSummaryProperty
+        {
+            get { return _issummaryprop; }
+            set { _issummaryprop = value; }
         }
 
         /// <summary>

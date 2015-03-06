@@ -48,8 +48,6 @@ namespace Model.Data
             public const string PropertySchemaId = "PropertySchemaId";
             public const string Name = "Name";
             public const string IsRequired = "IsRequired";
-            public const string IsCalcValue = "IsCalcValue";
-            public const string IsStatMod = "IsStatMod";
             public const string Multiplicity = "Multiplicity";
         }
 
@@ -68,6 +66,20 @@ namespace Model.Data
             public const string Name = "Name";
         }
 
+        private struct GameObjectPropertyNames
+        {
+            public const string Table = "GameObjectProperties";
+            public const string GameObjectId = "GameObjectId";
+            public const string PropertyId = "PropertyId";
+        }
+
+        public struct GameObjectPropertySchemaNames
+        {
+            public const string Table = "GameObjectPropertySchemas";
+            public const string GameObjectSchemaId = "GameObjectSchemaId";
+            public const string PropertySchemaId = "PropertySchemaId";
+        }
+
         private struct PropertyNames
         {
             public const string Table = "Properties";
@@ -83,6 +95,7 @@ namespace Model.Data
             public const string Id = "PropertySchemaId";
             public const string GameObjectSchemaId = "GameObjectSchemaId";
             public const string Name = "Name";
+            public const string IsSummaryProp = "IsSummaryProperty";
         }
 
         /// <summary>
@@ -116,8 +129,6 @@ namespace Model.Data
             attrsch.Id = (int)Fields[AttributeSchemaNames.Id];
             attrsch.Name = Fields[AttributeSchemaNames.Name].ToString();
             attrsch.IsRequired = (bool)Fields[AttributeSchemaNames.IsRequired];
-            attrsch.IsCalcValue = (bool)Fields[AttributeSchemaNames.IsCalcValue];
-            attrsch.IsStatModifier = (bool)Fields[AttributeSchemaNames.IsCalcValue];
             attrsch.Multiplicity = (int)Fields[AttributeSchemaNames.Multiplicity];
             attrsch.PropertySchemaId = (int)Fields[AttributeSchemaNames.PropertySchemaId];
 
@@ -181,6 +192,7 @@ namespace Model.Data
             propsch.Id = (int)Fields[PropertySchemaNames.Id];
             propsch.Name = Fields[PropertySchemaNames.Name].ToString();
             propsch.GameObjectSchemaId = (int)Fields[PropertySchemaNames.GameObjectSchemaId];
+            propsch.IsSummaryProperty = (bool)Fields[PropertySchemaNames.IsSummaryProp];
 
             IEnumerable<AttributeSchema> attrschs = _attrschlist.Values.Where(attr => attr.PropertySchemaId == propsch.Id);
             foreach (AttributeSchema a in attrschs)
@@ -271,6 +283,16 @@ namespace Model.Data
             return _gameobjschlist;
         }
 
+        public override Dictionary<int, GameObjectProperties> BuildGameObjectPropertiesDictionary()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Dictionary<int, GameObjectPropertySchemas> BuildGameObjectPropertySchemasDictionary()
+        {
+            throw new NotImplementedException();
+        }
+
         public override Dictionary<int, Property> BuildPropertyDictionary()
         {
             if (_proplist.Values.Count > 0) { return _proplist; }
@@ -322,5 +344,6 @@ namespace Model.Data
             _proplist = new Dictionary<int, Property>();
             _propschlist = new Dictionary<int, PropertySchema>();
         }
+
     }
 }
