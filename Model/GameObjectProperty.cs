@@ -12,10 +12,20 @@ namespace Model
     /// different game objects and supports querying of game
     /// object property relationships by the application.
     /// </summary>
-    public class GameObjectProperties
+    public class GameObjectProperty
     {
+        private int _id;
         private GameObject _gameobj;
         private Property _prop;
+
+        /// <summary>
+        /// The object business id.
+        /// </summary>
+        public int Id
+        {
+            get { return _id; }
+            set { _id = value; }
+        }
 
         /// <summary>
         /// The GameObject side of this relationship.

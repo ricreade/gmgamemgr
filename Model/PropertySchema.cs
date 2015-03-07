@@ -17,7 +17,7 @@ namespace Model
         private int _id;
         private string _name;
         private Dictionary<int, AttributeSchema> _attrschemas;
-        private int _gameobjschid;
+        private GameObjectSchema _gameobjsch;
         private bool _issummaryprop;
 
         public PropertySchema()
@@ -51,16 +51,20 @@ namespace Model
 
         public Dictionary<int, AttributeSchema> AttributeSchemas
         {
-            get { return _attrschemas; }
+            get {
+                if (_attrschemas == null)
+                    _attrschemas = new Dictionary<int, AttributeSchema>();
+                return _attrschemas; 
+            }
         }
 
         /// <summary>
-        /// The id of the game object that owns this property.
+        /// The game object that owns this property.
         /// </summary>
-        public int GameObjectSchemaId
+        public GameObjectSchema GameObjectSchema
         {
-            get { return _gameobjschid; }
-            set { _gameobjschid = value; }
+            get { return _gameobjsch; }
+            set { _gameobjsch = value; }
         }
 
         /// <summary>
@@ -79,7 +83,7 @@ namespace Model
         {
             _id = 0;
             _name = "";
-            _attrschemas = new Dictionary<int, AttributeSchema>();
+            _attrschemas = null;
         }
 
         /// <summary>

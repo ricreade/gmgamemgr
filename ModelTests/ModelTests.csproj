@@ -36,6 +36,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -55,8 +57,13 @@
     <Compile Include="PropertyTest.cs" />
     <Compile Include="GameObjectTest.cs" />
     <Compile Include="AttributeSchemaTest.cs" />
+    <Compile Include="DataConnTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GMGameManager\GMGameManager.csproj">
+      <Project>{b4cc042d-bf84-4d26-a01f-e1cbe3ee7a7c}</Project>
+      <Name>GMGameManager</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{5a75c239-b38a-4205-9e83-05f7f6fbfa1b}</Project>
       <Name>Model</Name>

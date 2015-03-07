@@ -15,6 +15,16 @@ namespace Model
         private int _gameobjid;
 
         /// <summary>
+        /// Instantiates a new property with no schema.  The property cannot be saved
+        /// until its schema is declared and all property attributes required by the
+        /// schema have been populated.
+        /// </summary>
+        public Property()
+        {
+            Initialize();
+        }
+
+        /// <summary>
         /// Instantiates a new property based on the specified schema.  The property
         /// cannot be saved until all required attributes defined by the schema have
         /// been populated.
@@ -58,7 +68,11 @@ namespace Model
         /// </summary>
         public Dictionary<int, AttributeItem> Attributes
         {
-            get { return _attrs; }
+            get {
+                if (_attrs == null)
+                    _attrs = new Dictionary<int, AttributeItem>();
+                return _attrs; 
+            }
         }
 
         public int GameObjectId
@@ -97,6 +111,7 @@ namespace Model
         public PropertySchema Schema
         {
             get { return _schema; }
+            set { _schema = value; }
         }
 
         /// <summary>
@@ -107,7 +122,7 @@ namespace Model
             _id = 0;
             _name = "";
             _schema = null;
-            _attrs = new Dictionary<int, AttributeItem>();
+            _attrs = null;
         }
 
         /// <summary>

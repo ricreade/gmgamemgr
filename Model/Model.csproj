@@ -58,8 +58,8 @@
     <Compile Include="Data\SqlDataRecordset.cs" />
     <Compile Include="Data\SqlRecordsetIntegration.cs" />
     <Compile Include="GameObject.cs" />
-    <Compile Include="GameObjectProperties.cs" />
-    <Compile Include="GameObjectPropertySchemas.cs" />
+    <Compile Include="GameObjectProperty.cs" />
+    <Compile Include="GameObjectPropertySchema.cs" />
     <Compile Include="GameObjectSchema.cs" />
     <Compile Include="Data\IDataRecordset.cs" />
     <Compile Include="Data\IDataIntegration.cs" />

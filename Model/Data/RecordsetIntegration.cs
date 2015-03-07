@@ -21,6 +21,8 @@ namespace Model.Data
         protected Dictionary<int, PropertySchema> _propschlist;
         protected Dictionary<int, GameObject> _gameobjlist;
         protected Dictionary<int, GameObjectSchema> _gameobjschlist;
+        protected Dictionary<int, GameObjectProperty> _gameobjproplist;
+        protected Dictionary<int, GameObjectPropertySchema> _gameobjpropschlist;
 
         public RecordsetIntegration(IDataRecordset Recordset)
         {
@@ -55,10 +57,19 @@ namespace Model.Data
         /// <returns>A dictionary of game object schema objects.</returns>
         public abstract Dictionary<int, GameObjectSchema> BuildGameObjectSchemaDictionary();
 
+        /// <summary>
+        /// Constructs a game object properties dictionary based on the record
+        /// data stored in the integration data source.
+        /// </summary>
+        /// <returns>A dictionary of game object property objects.</returns>
+        public abstract Dictionary<int, GameObjectProperty> BuildGameObjectPropertiesDictionary();
 
-        public abstract Dictionary<int, GameObjectProperties> BuildGameObjectPropertiesDictionary();
-
-        public abstract Dictionary<int, GameObjectPropertySchemas> BuildGameObjectPropertySchemasDictionary();
+        /// <summary>
+        /// Constructs a game object property schema dictionary based on the
+        /// record data stored in the integration data source.
+        /// </summary>
+        /// <returns>A dictionary of game object property schema objects.</returns>
+        public abstract Dictionary<int, GameObjectPropertySchema> BuildGameObjectPropertySchemasDictionary();
 
         /// <summary>
         /// Constructs a property dictionary based on the record data stored

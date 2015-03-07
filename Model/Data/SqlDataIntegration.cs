@@ -64,9 +64,12 @@ namespace Model.Data
             SqlCommand comm = Connection.CreateCommand();
             comm.CommandText = ProcedureName;
             comm.CommandType = CommandType.StoredProcedure;
-            for (int i = 0; i < Args.Length; i++)
+            if (Args != null)
             {
-                comm.Parameters.Add(Args[i].GetArgument());
+                for (int i = 0; i < Args.Length; i++)
+                {
+                    comm.Parameters.Add(Args[i].GetArgument());
+                }
             }
             return comm;
         }
@@ -104,6 +107,10 @@ namespace Model.Data
                 {
                     throw;
                 }
+                finally
+                {
+                    conn.Close();
+                }
             }
         }
 
@@ -119,6 +126,7 @@ namespace Model.Data
         public IDataRecordset SendDataRequest(string Command, IDataParameter[] Args)
         {
             DataSet dataset;
+            string[] tablenames = new string[] { "AttributeSchemas", "Attributes" };
             using (SqlConnection conn = new SqlConnection(_connstr))
             {
                 try
@@ -128,10 +136,23 @@ namespace Model.Data
                     SqlDataAdapter adapter = new SqlDataAdapter(comm);
                     dataset = new DataSet();
                     adapter.Fill(dataset);
+
+                    // For some unfathomable reason, the tables written to the dataset
+                    // from the procedure are named 'Table', 'Table1', 'Table2', etc,
+                    // rather than using the table names as given in the procedure.
+                    for (int i = 0; i < dataset.Tables.Count && i < tablenames.Length; i++)
+                    {
+                        dataset.Tables[i].TableName = tablenames[i];
+                    }
+
                     return new SqlDataRecordset(dataset);
                 }
                 catch (Exception ex){
                     throw;
+                }
+                finally
+                {
+                    conn.Close();
                 }
             }
         }

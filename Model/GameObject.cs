@@ -17,7 +17,7 @@ namespace Model
     {
         int _id;
         private GameObjectSchema _schema;
-        private Dictionary<int, Property> _props;
+        private Dictionary<int, GameObjectProperty> _props;
         private string _name;
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace Model
             set { _id = value; }
         }
 
-        public Dictionary<int, Property> Properties
+        public Dictionary<int, GameObjectProperty> Properties
         {
             get { return _props; }
         }
@@ -83,7 +83,7 @@ namespace Model
             _id = 0;
             _schema = null;
             _name = "";
-            _props = new Dictionary<int, Property>();
+            _props = new Dictionary<int, GameObjectProperty>();
         }
 
         /// <summary>
@@ -94,6 +94,16 @@ namespace Model
         public void Load()
         {
 
+        }
+
+        public void LoadProperties(Dictionary<int, GameObjectProperty> PropertyDictionary){
+            IEnumerable<GameObjectProperty> props = 
+                PropertyDictionary.Values.Where(prop => prop.GameObject.Id == this.Id);
+
+            foreach (GameObjectProperty prop in props)
+            {
+                _props.Add(prop.Property.Id, prop);
+            }
         }
 
         /// <summary>

@@ -114,12 +114,12 @@ namespace Model.Data
             _attrlist = new Dictionary<int, AttributeItem>();
         }
 
-        public override Dictionary<int, GameObjectProperties> BuildGameObjectPropertiesDictionary()
+        public override Dictionary<int, GameObjectProperty> BuildGameObjectPropertiesDictionary()
         {
             throw new NotImplementedException();
         }
 
-        public override Dictionary<int, GameObjectPropertySchemas> BuildGameObjectPropertySchemasDictionary()
+        public override Dictionary<int, GameObjectPropertySchema> BuildGameObjectPropertySchemasDictionary()
         {
             throw new NotImplementedException();
         }

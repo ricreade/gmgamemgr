@@ -13,10 +13,20 @@ namespace Model
     /// schemas.  This also supports querying of shared relationships
     /// between the two schemas.
     /// </summary>
-    public class GameObjectPropertySchemas
+    public class GameObjectPropertySchema
     {
+        private int _id;
         private GameObjectSchema _gameobjsch;
         private PropertySchema _propsch;
+
+        /// <summary>
+        /// The object business id.
+        /// </summary>
+        public int Id
+        {
+            get { return _id; }
+            set { _id = value; }
+        }
 
         /// <summary>
         /// The GameObjectSchema side of this relationship.

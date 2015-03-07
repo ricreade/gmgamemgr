@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+using GMGameManager;
 using Model;
 using Model.Data;
 
@@ -11,7 +14,7 @@ namespace ModelTests
     public class AttributeSchemaTest
     {
         [TestMethod]
-        public void TestAttributeSchemaConstructor()
+        public void TestAttributeSchemaConstructorMock()
         {
             MockRecordsetIntegration integration = new MockRecordsetIntegration(new MockDataRecordset());
 
@@ -35,6 +38,72 @@ namespace ModelTests
             Assert.AreEqual<string>("description", description.Name);
             Assert.AreEqual<bool>(false, description.IsRequired);
             Assert.AreEqual<int>(1, description.Multiplicity);
+        }
+
+        [TestMethod]
+        public void TestAttributeSchemaConstructorSql()
+        {
+            String conn = GMGameManager.Properties.Settings.Default.ConnString;
+            SqlDataIntegration dataIntegration = null;
+            SqlDataRecordset records = null;
+            SqlRecordsetIntegration recordIntegration = null;
+            Dictionary<int, AttributeSchema> schemas = null;
+
+            try
+            {
+                dataIntegration = new SqlDataIntegration(conn);
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Fail at connection: " + ex.Message);
+            }
+
+            try
+            {
+                records = (SqlDataRecordset)dataIntegration.SendDataRequest("GetAllRecords", null);
+                if (records.Dataset.Tables.Count == 0)
+                {
+                    Assert.Fail("No tables retrieved");
+                }
+                for (int i = 0; i < records.Dataset.Tables.Count; i++)
+                {
+                    DataTable table = records.Dataset.Tables[i];
+                    if (records.Dataset.Tables[i].Rows.Count == 0)
+                    {
+                        Assert.Fail(String.Format("Table {0} return no results.",
+                            records.Dataset.Tables[i].TableName));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Fail at request: " + ex.Message);
+            }
+
+            recordIntegration = new SqlRecordsetIntegration(records);
+            Assert.IsNotNull(recordIntegration, "Fail - record integration is null.");
+
+            try
+            {
+                schemas = recordIntegration.BuildAttributeSchemaDictionary();
+                Assert.IsNotNull(schemas, "Fail - schemas result is null.");
+                if (schemas.Count == 0)
+                {
+                    Assert.Fail("No records retrieved");
+                }
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Fail at object build: " + ex.Message);
+            }
+
+            AttributeSchema ability = schemas[1];
+            AttributeSchema bonus = schemas[2];
+            AttributeSchema desc = schemas[3];
+
+            Assert.AreEqual<string>("ability", ability.Name);
+            Assert.AreEqual<string>("bonus", bonus.Name);
+            Assert.AreEqual<string>("description", desc.Name);
         }
     }
 }

@@ -69,6 +69,7 @@ namespace Model.Data
         private struct GameObjectPropertyNames
         {
             public const string Table = "GameObjectProperties";
+            public const string Id = "GameObjectPropertyId";
             public const string GameObjectId = "GameObjectId";
             public const string PropertyId = "PropertyId";
         }
@@ -76,6 +77,7 @@ namespace Model.Data
         public struct GameObjectPropertySchemaNames
         {
             public const string Table = "GameObjectPropertySchemas";
+            public const string Id = "GameObjectPropertySchemaId";
             public const string GameObjectSchemaId = "GameObjectSchemaId";
             public const string PropertySchemaId = "PropertySchemaId";
         }
@@ -85,7 +87,6 @@ namespace Model.Data
             public const string Table = "Properties";
             public const string Id = "PropertyId";
             public const string PropertySchemaId = "PropertySchemaId";
-            public const string GameObjectId = "GameObjectId";
             public const string Name = "Name";
         }
 
@@ -93,7 +94,6 @@ namespace Model.Data
         {
             public const string Table = "PropertySchemas";
             public const string Id = "PropertySchemaId";
-            public const string GameObjectSchemaId = "GameObjectSchemaId";
             public const string Name = "Name";
             public const string IsSummaryProp = "IsSummaryProperty";
         }
@@ -111,7 +111,7 @@ namespace Model.Data
             AttributeItem attr = new AttributeItem(_attrschlist[schemaId]);
             attr.Id = (int)Fields[AttributeFields.Id];
             attr.Value = Fields[AttributeFields.Value].ToString();
-            attr.PropertyId = (int)Fields[AttributeFields.PropertyId];
+            attr.Property.Id = (int)Fields[AttributeFields.PropertyId];
 
             return attr;
         }
@@ -130,12 +130,12 @@ namespace Model.Data
             attrsch.Name = Fields[AttributeSchemaNames.Name].ToString();
             attrsch.IsRequired = (bool)Fields[AttributeSchemaNames.IsRequired];
             attrsch.Multiplicity = (int)Fields[AttributeSchemaNames.Multiplicity];
-            attrsch.PropertySchemaId = (int)Fields[AttributeSchemaNames.PropertySchemaId];
+            attrsch.PropertySchema.Id = (int)Fields[AttributeSchemaNames.PropertySchemaId];
 
             return attrsch;
         }
 
-        public GameObject FillGameObject(DataRow Fields)
+        private GameObject FillGameObject(DataRow Fields)
         {
             int schemaId = (int)Fields[GameObjectNames.GameObjectSchemaId];
 
@@ -143,28 +143,42 @@ namespace Model.Data
             g.Id = (int)Fields[GameObjectNames.Id];
             g.Name = Fields[GameObjectNames.Name].ToString();
 
-            IEnumerable<Property> props = _proplist.Values.Where(prop => prop.GameObjectId == g.Id);
-            foreach (Property p in props)
-            {
-                g.Properties.Add(p.Id, p);
-            }
-
             return g;
         }
 
-        public GameObjectSchema FillGameObjectSchema(DataRow Fields)
+        private GameObjectSchema FillGameObjectSchema(DataRow Fields)
         {
             GameObjectSchema gos = new GameObjectSchema();
             gos.Id = (int)Fields[GameObjectSchemaNames.Id];
             gos.Name = Fields[GameObjectSchemaNames.Name].ToString();
 
-            IEnumerable<PropertySchema> propschs = _propschlist.Values.Where(prop => prop.GameObjectSchemaId == gos.Id);
-            foreach (PropertySchema p in propschs)
-            {
-                gos.PropertySchemas.Add(p.Id, p);
-            }
-
             return gos;
+        }
+
+        private GameObjectProperty FillGameObjectProperty(DataRow Fields)
+        {
+            GameObjectProperty gop = new GameObjectProperty();
+            int gameobjid = (int)Fields[GameObjectPropertyNames.GameObjectId];
+            int propid = (int)Fields[GameObjectPropertyNames.PropertyId];
+
+            gop.Id = (int)Fields[GameObjectPropertyNames.Id];
+            gop.GameObject = BuildGameObjectDictionary()[gameobjid];
+            gop.Property = BuildPropertyDictionary()[propid];
+
+            return gop;
+        }
+
+        private GameObjectPropertySchema FillGameObjectPropertySchema(DataRow Fields)
+        {
+            GameObjectPropertySchema gops = new GameObjectPropertySchema();
+            int gameobjschid = (int)Fields[GameObjectPropertySchemaNames.GameObjectSchemaId];
+            int propschid = (int)Fields[GameObjectPropertySchemaNames.PropertySchemaId];
+
+            gops.Id = (int)Fields[GameObjectPropertySchemaNames.Id];
+            gops.GameObjectSchema = BuildGameObjectSchemaDictionary()[gameobjschid];
+            gops.PropertySchema = BuildPropertySchemaDictionary()[propschid];
+
+            return gops;
         }
 
         private Property FillProperty(DataRow Fields)
@@ -174,9 +188,8 @@ namespace Model.Data
             Property prop = new Property(_propschlist[schemaId]);
             prop.Id = (int)Fields[PropertyNames.Id];
             prop.Name = Fields[PropertyNames.Name].ToString();
-            prop.GameObjectId = (int)Fields[PropertyNames.GameObjectId];
 
-            IEnumerable<AttributeItem> attrs = _attrlist.Values.Where(attr => attr.PropertyId == prop.Id);
+            IEnumerable<AttributeItem> attrs = _attrlist.Values.Where(attr => attr.Property.Id == prop.Id);
             foreach (AttributeItem a in attrs)
             {
                 prop.Attributes.Add(a.Id, a);
@@ -191,10 +204,9 @@ namespace Model.Data
 
             propsch.Id = (int)Fields[PropertySchemaNames.Id];
             propsch.Name = Fields[PropertySchemaNames.Name].ToString();
-            propsch.GameObjectSchemaId = (int)Fields[PropertySchemaNames.GameObjectSchemaId];
             propsch.IsSummaryProperty = (bool)Fields[PropertySchemaNames.IsSummaryProp];
 
-            IEnumerable<AttributeSchema> attrschs = _attrschlist.Values.Where(attr => attr.PropertySchemaId == propsch.Id);
+            IEnumerable<AttributeSchema> attrschs = _attrschlist.Values.Where(attr => attr.PropertySchema.Id == propsch.Id);
             foreach (AttributeSchema a in attrschs)
             {
                 propsch.AttributeSchemas.Add(a.Id, a);
@@ -230,12 +242,14 @@ namespace Model.Data
             AttributeSchema a;
             DataTable table = ((SqlDataRecordset)_rst).Dataset.Tables[AttributeSchemaNames.Table];
 
-            for (int i = 0; i < table.Rows.Count; i++)
+            if (table != null)
             {
-                a = FillAttributeSchema(table.Rows[i]);
-                _attrschlist.Add(a.Id, a);
+                for (int i = 0; i < table.Rows.Count; i++)
+                {
+                    a = FillAttributeSchema(table.Rows[i]);
+                    _attrschlist.Add(a.Id, a);
+                }
             }
-
             return _attrschlist;
         }
 
@@ -245,10 +259,6 @@ namespace Model.Data
             if (_gameobjschlist.Values.Count == 0)
             {
                 BuildGameObjectSchemaDictionary();
-            }
-            if (_proplist.Values.Count == 0)
-            {
-                BuildPropertyDictionary();
             }
 
             GameObject g;
@@ -266,10 +276,6 @@ namespace Model.Data
         public override Dictionary<int, GameObjectSchema> BuildGameObjectSchemaDictionary()
         {
             if (_gameobjschlist.Values.Count > 0) { return _gameobjschlist; }
-            if (_propschlist.Values.Count == 0)
-            {
-                BuildPropertySchemaDictionary();
-            }
 
             GameObjectSchema g;
             DataTable table = ((SqlDataRecordset)_rst).Dataset.Tables[GameObjectSchemaNames.Table];
@@ -283,14 +289,52 @@ namespace Model.Data
             return _gameobjschlist;
         }
 
-        public override Dictionary<int, GameObjectProperties> BuildGameObjectPropertiesDictionary()
+        public override Dictionary<int, GameObjectProperty> BuildGameObjectPropertiesDictionary()
         {
-            throw new NotImplementedException();
+            if (_gameobjproplist.Values.Count > 0) { return _gameobjproplist; }
+            if (_gameobjlist.Values.Count == 0)
+            {
+                BuildGameObjectDictionary();
+            }
+            if (_proplist.Values.Count == 0)
+            {
+                BuildPropertyDictionary();
+            }
+
+            GameObjectProperty p;
+            DataTable table = ((SqlDataRecordset)_rst).Dataset.Tables[GameObjectPropertyNames.Table];
+
+            for (int i = 0; i < table.Rows.Count; i++)
+            {
+                p = FillGameObjectProperty(table.Rows[i]);
+                _gameobjproplist.Add(p.Id, p);
+            }
+
+            return _gameobjproplist;
         }
 
-        public override Dictionary<int, GameObjectPropertySchemas> BuildGameObjectPropertySchemasDictionary()
+        public override Dictionary<int, GameObjectPropertySchema> BuildGameObjectPropertySchemasDictionary()
         {
-            throw new NotImplementedException();
+            if (_gameobjpropschlist.Values.Count > 0) { return _gameobjpropschlist; }
+            if (_gameobjschlist.Values.Count == 0)
+            {
+                BuildGameObjectSchemaDictionary();
+            }
+            if (_propschlist.Values.Count == 0)
+            {
+                BuildPropertySchemaDictionary();
+            }
+
+            GameObjectPropertySchema p;
+            DataTable table = ((SqlDataRecordset)_rst).Dataset.Tables[GameObjectPropertySchemaNames.Table];
+
+            for (int i = 0; i < table.Rows.Count; i++)
+            {
+                p = FillGameObjectPropertySchema(table.Rows[i]);
+                _gameobjpropschlist.Add(p.Id, p);
+            }
+
+            return _gameobjpropschlist;
         }
 
         public override Dictionary<int, Property> BuildPropertyDictionary()
@@ -343,6 +387,10 @@ namespace Model.Data
             _attrschlist = new Dictionary<int, AttributeSchema>();
             _proplist = new Dictionary<int, Property>();
             _propschlist = new Dictionary<int, PropertySchema>();
+            _gameobjlist = new Dictionary<int, GameObject>();
+            _gameobjschlist = new Dictionary<int, GameObjectSchema>();
+            _gameobjproplist = new Dictionary<int, GameObjectProperty>();
+            _gameobjpropschlist = new Dictionary<int, GameObjectPropertySchema>();
         }
 
     }

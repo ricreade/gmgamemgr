@@ -16,7 +16,7 @@ namespace Model
     {
         private int _id;
         private string _name;
-        private Dictionary<int, PropertySchema> _propschemas;
+        private Dictionary<int, GameObjectPropertySchema> _propschemas;
 
         public GameObjectSchema()
         {
@@ -53,7 +53,7 @@ namespace Model
         {
             _id = 0;
             _name = "";
-            _propschemas = new Dictionary<int, PropertySchema>();
+            _propschemas = new Dictionary<int, GameObjectPropertySchema>();
         }
 
         /// <summary>
@@ -76,6 +76,16 @@ namespace Model
              */
         }
 
+        public void LoadPropertySchemas(Dictionary<int, GameObjectPropertySchema> PropertySchemaDictionary){
+            IEnumerable<GameObjectPropertySchema> props = 
+                PropertySchemaDictionary.Values.Where(prop => prop.GameObjectSchema.Id == this.Id);
+
+            foreach (GameObjectPropertySchema prop in props)
+            {
+                _propschemas.Add(prop.PropertySchema.Id, prop);
+            }
+        }
+
         /// <summary>
         /// The game object schema name.
         /// </summary>
@@ -94,7 +104,7 @@ namespace Model
         /// <summary>
         /// A collection of all property schemas that define this object.
         /// </summary>
-        public Dictionary<int, PropertySchema> PropertySchemas
+        public Dictionary<int, GameObjectPropertySchema> PropertySchemas
         {
             get { return _propschemas; }
         }

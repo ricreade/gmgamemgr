@@ -18,7 +18,7 @@ namespace Model
         private string _name;
         private bool _isrequired;
         private int _multiplicity;
-        private int _propschid;
+        private PropertySchema _propsch;
 
         /// <summary>
         /// Instantiates a new empty attribute schema.
@@ -61,7 +61,7 @@ namespace Model
             _name = "";
             _isrequired = false;
             _multiplicity = 1;
-            _propschid = 0;
+            _propsch = new PropertySchema();
         }
 
         /// <summary>
@@ -123,10 +123,10 @@ namespace Model
         /// The id of the parent property schema.  This value supports reconstruction
         /// of the property tree after data has been pull en mass from the database.
         /// </summary>
-        public int PropertySchemaId
+        public PropertySchema PropertySchema
         {
-            get { return _propschid; }
-            set { _propschid = value; }
+            get { return _propsch; }
+            set { _propsch = value; }
         }
     }
 }
