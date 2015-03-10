@@ -106,12 +106,20 @@ namespace Model.Data
         /// <returns>The hydrated attribute.</returns>
         private AttributeItem FillAttribute(DataRow Fields)
         {
-            int schemaId = (int)Fields[AttributeFields.AttributeSchemaId];
-
+            int schemaId = GetTypedValue<int>(Fields[AttributeFields.AttributeSchemaId]);
             AttributeItem attr = new AttributeItem(_attrschlist[schemaId]);
-            attr.Id = (int)Fields[AttributeFields.Id];
-            attr.Value = Fields[AttributeFields.Value].ToString();
-            attr.Property.Id = (int)Fields[AttributeFields.PropertyId];
+
+            try
+            {
+                attr.Id = GetTypedValue<int>(Fields[AttributeFields.Id]);
+                attr.Value = GetTypedValue<string>(Fields[AttributeFields.Value]);
+                attr.Property = new Property();
+                attr.Property.Id = GetTypedValue<int>(Fields[AttributeFields.PropertyId]);
+            }
+            catch (InvalidCastException ex)
+            {
+                throw;
+            }
 
             return attr;
         }
@@ -226,10 +234,13 @@ namespace Model.Data
             AttributeItem a;
             DataTable table = ((SqlDataRecordset)_rst).Dataset.Tables[AttributeFields.Table];
 
-            for (int i = 0; i < table.Rows.Count; i++)
+            if (table != null)
             {
-                a = FillAttribute(table.Rows[i]);
-                _attrlist.Add(a.Id, a);
+                for (int i = 0; i < table.Rows.Count; i++)
+                {
+                    a = FillAttribute(table.Rows[i]);
+                    _attrlist.Add(a.Id, a);
+                }
             }
 
             return _attrlist;

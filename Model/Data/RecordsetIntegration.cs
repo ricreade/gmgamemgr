@@ -90,5 +90,22 @@ namespace Model.Data
         /// method should be called automatically by all implementation constructors.
         /// </summary>
         public abstract void Initialize();
+
+        /// <summary>
+        /// Conversion method for converting datastore values to the specified type.
+        /// If a conversion is not possible, throws an InvalidCastException.
+        /// </summary>
+        /// <typeparam name="T">The type to which the value should be converted.</typeparam>
+        /// <param name="Value">The value to convert.</param>
+        /// <returns>The typed value.</returns>
+        protected T GetTypedValue<T>(object Value)
+        {
+            if (Value.GetType() == typeof(T))
+                return (T)Value;
+            else
+                throw new InvalidCastException(String.Format(
+                    "Expected type '{0}', but found type '{1}' for value {2}.", 
+                    typeof(T), Value.GetType(), Value.ToString()));
+        }
     }
 }

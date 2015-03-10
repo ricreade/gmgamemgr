@@ -127,6 +127,7 @@ namespace Model.Data
         {
             DataSet dataset;
             string[] tablenames = new string[] { "AttributeSchemas", "Attributes" };
+            List<string> names;
             using (SqlConnection conn = new SqlConnection(_connstr))
             {
                 try
@@ -139,8 +140,19 @@ namespace Model.Data
 
                     // For some unfathomable reason, the tables written to the dataset
                     // from the procedure are named 'Table', 'Table1', 'Table2', etc,
-                    // rather than using the table names as given in the procedure.
-                    for (int i = 0; i < dataset.Tables.Count && i < tablenames.Length; i++)
+                    // rather than using the table names as given in the procedure.  There
+                    // is apparently no way to unambiguously identify the table data
+                    // returned.  The tablesnames array just has to have the tables names
+                    // in the same sequence as the stored procedure return order.
+                    DataTable tableNames = dataset.Tables[0];
+                    names = new List<string>();
+                    for (int i = 0; i < tableNames.Rows.Count; i++)
+                    {
+                        names.Add(tableNames.Rows[i].ToString());
+                    }
+                    dataset.Tables.RemoveAt(0);
+
+                    for (int i = 0; i < dataset.Tables.Count && i < names.Count; i++)
                     {
                         dataset.Tables[i].TableName = tablenames[i];
                     }
