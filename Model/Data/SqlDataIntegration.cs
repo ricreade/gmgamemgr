@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.SqlServer.Server;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -102,6 +103,55 @@ namespace Model.Data
                     conn.Open();
                     SqlCommand comm = ConfigureCommand(conn, Command, Args);
                     return comm.ExecuteNonQuery() > 0;
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+        }
+
+        private IEnumerable<SqlDataRecord> BuildObjectIdEnumeration(IList<int> IdList)
+        {
+            SqlMetaData[] schema = new SqlMetaData[]{
+                new SqlMetaData("Id", SqlDbType.Int)
+            };
+            SqlDataRecord datarecord = new SqlDataRecord(schema);
+
+            foreach (int Id in IdList)
+            {
+                datarecord.SetInt32(0, Id);
+                yield return datarecord;
+            }
+        }
+
+        public IDataRecordset SendDataRequest(string Command, IDataParameter[] Args, int a)
+        {
+            DataSet dataset;
+            IList<int> idlist = (IList<int>)Args[0].GetValue();
+            using (SqlConnection conn = new SqlConnection(_connstr))
+            {
+                try
+                {
+                    conn.Open();
+                    dataset = new DataSet();
+                    SqlCommand comm = conn.CreateCommand();
+                    comm.CommandText = Command;
+                    comm.CommandType = CommandType.StoredProcedure;
+                    SqlParameter param = new SqlParameter();
+                    param.ParameterName = "@idList";
+                    param.TypeName = "RecordIdList";
+                    param.SqlDbType = SqlDbType.Structured;
+                    param.Value = BuildObjectIdEnumeration(idlist);
+                    comm.Parameters.Add(param);
+                    SqlDataAdapter adapter = new SqlDataAdapter(comm);
+                    adapter.Fill(dataset);
+                    dataset.Tables[0].TableName = "AttributeSchemas";
+                    return new SqlDataRecordset(dataset);
                 }
                 catch (Exception ex)
                 {
