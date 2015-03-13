@@ -135,7 +135,7 @@ namespace ModelTests
 
             try
             {
-                records = (SqlDataRecordset)dataIntegration.SendDataRequest("GetAttributeSchemas", GetTestIdList(), 0);
+                records = (SqlDataRecordset)dataIntegration.SendDataRequest("AttributeSchema_Read", GetTestIdList(), 0);
                 if (records.Dataset.Tables.Count == 0)
                 {
                     Assert.Fail("No tables retrieved");
