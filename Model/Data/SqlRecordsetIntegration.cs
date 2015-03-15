@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -404,5 +405,21 @@ namespace Model.Data
             _gameobjpropschlist = new Dictionary<int, GameObjectPropertySchema>();
         }
 
+        /// <summary>
+        /// Constructs an array of SqlDataParameter objects representing the
+        /// attributes
+        /// </summary>
+        /// <param name="Schema"></param>
+        /// <returns></returns>
+        public static SqlDataParameter[] ParameterizeAttributeSchema(AttributeSchema Schema)
+        {
+            return new SqlDataParameter[]{
+                new SqlDataParameter("@AttributeSchemaId",  Schema.Id),
+                new SqlDataParameter("@Name",               Schema.Name),
+                new SqlDataParameter("@IsRequired",         Schema.IsRequired),
+                new SqlDataParameter("@Multiplicity",       Schema.Multiplicity),
+                new SqlDataParameter("@PropertySchemaId",   Schema.PropertySchema.Id)
+            };
+        }
     }
 }

@@ -96,13 +96,20 @@ namespace Model.Data
         /// <returns>True if the request affected any records, otherwise false.</returns>
         public bool SendActionRequest(string Command, IDataParameter[] Args)
         {
+            SqlParameter outParam;
             using (SqlConnection conn = new SqlConnection(_connstr))
             {
                 try
                 {
                     conn.Open();
                     SqlCommand comm = ConfigureCommand(conn, Command, Args);
-                    return comm.ExecuteNonQuery() > 0;
+
+                    outParam = new SqlParameter("@RowsAffected", SqlDbType.Int);
+                    outParam.Direction = ParameterDirection.Output;
+                    comm.Parameters.Add(outParam);
+                    comm.ExecuteNonQuery();
+                    int result = (int)outParam.Value;
+                    return result > 0;
                 }
                 catch (Exception ex)
                 {

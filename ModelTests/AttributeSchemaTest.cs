@@ -126,15 +126,6 @@ namespace ModelTests
 
             try
             {
-                dataIntegration = new SqlDataIntegration(conn);
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail("Fail at connection: " + ex.Message);
-            }
-
-            try
-            {
                 records = (SqlDataRecordset)dataIntegration.SendDataRequest("AttributeSchema_Read", GetTestIdList(), 0);
                 if (records.Dataset.Tables.Count == 0)
                 {
@@ -179,6 +170,37 @@ namespace ModelTests
             Assert.AreEqual<string>("ability", ability.Name);
             Assert.AreEqual<string>("bonus", bonus.Name);
             Assert.AreEqual<string>("description", desc.Name);
+        }
+
+        [TestMethod]
+        public void TestAttributeSchemaUpsert()
+        {
+            String conn = GMGameManager.Properties.Settings.Default.ConnString;
+            SqlDataIntegration dataIntegration = null;
+            SqlDataRecordset records = null;
+            SqlRecordsetIntegration recordIntegration = null;
+            AttributeSchema Schema;
+            bool result;
+
+            try
+            {
+                dataIntegration = new SqlDataIntegration(conn);
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Fail at connection: " + ex.Message);
+            }
+
+            Schema = new AttributeSchema();
+            Schema.Name = "weight";
+            Schema.IsRequired = true;
+            Schema.Multiplicity = 1;
+            Schema.PropertySchema.Id = 1;
+
+            result = dataIntegration.SendActionRequest("AttributeSchema_Upsert", 
+                SqlRecordsetIntegration.ParameterizeAttributeSchema(Schema));
+
+            Assert.IsTrue(result);
         }
 
         private Model.Data.IDataParameter[] GetTestIdList()
