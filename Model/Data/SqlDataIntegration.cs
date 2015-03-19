@@ -104,8 +104,8 @@ namespace Model.Data
                     conn.Open();
                     SqlCommand comm = ConfigureCommand(conn, Command, Args);
 
-                    outParam = new SqlParameter("@RowsAffected", SqlDbType.Int);
-                    outParam.Direction = ParameterDirection.Output;
+                    outParam = new SqlParameter("@Output", SqlDbType.Int);
+                    outParam.Direction = ParameterDirection.ReturnValue;
                     comm.Parameters.Add(outParam);
                     comm.ExecuteNonQuery();
                     int result = (int)outParam.Value;
