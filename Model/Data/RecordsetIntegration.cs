@@ -11,9 +11,10 @@ namespace Model.Data
     /// specific implmentations of the integration to hydrate data objects
     /// from a record source.
     /// </summary>
-    public abstract class RecordsetIntegration
+    public abstract class RecordsetIntegration : IntegrationObject
     {
         protected IDataRecordset _rst;
+        protected DataIntegration _integration;
 
         protected Dictionary<int, Model.AttributeItem> _attrlist;
         protected Dictionary<int, AttributeSchema> _attrschlist;
@@ -27,6 +28,11 @@ namespace Model.Data
         public RecordsetIntegration(IDataRecordset Recordset)
         {
             _rst = Recordset;
+        }
+
+        public RecordsetIntegration(DataIntegration Integration)
+        {
+            _integration = Integration;
         }
 
         /// <summary>
@@ -98,6 +104,8 @@ namespace Model.Data
         /// <typeparam name="T">The type to which the value should be converted.</typeparam>
         /// <param name="Value">The value to convert.</param>
         /// <returns>The typed value.</returns>
+        /// <exception cref="InvalidCastException">The expected type T does not
+        /// match the actual type of Value.</exception>
         protected T GetTypedValue<T>(object Value)
         {
             if (Value.GetType() == typeof(T))
@@ -107,5 +115,17 @@ namespace Model.Data
                     "Expected type '{0}', but found type '{1}' for value {2}.", 
                     typeof(T), Value.GetType(), Value.ToString()));
         }
+
+        /// <summary>
+        /// Retrieves all records for the specified user.  Records in the database
+        /// are organized under the top-level GameObject.  All GameObjects for the
+        /// user are retrieved, then all properties and attributes (and their
+        /// associated schemas) that support those GameObjects.  This method is
+        /// intended to support application initialization by loading relevant
+        /// records into memory.
+        /// </summary>
+        /// <param name="User">The application user for whom all records should
+        /// be obtained.</param>
+        public abstract void RetrieveUserRecords(User User);
     }
 }

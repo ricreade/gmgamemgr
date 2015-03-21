@@ -12,10 +12,8 @@ namespace Model
     /// make up this property.  Both this property schema and its composite
     /// attribute schemas are defined and populated from the database.
     /// </summary>
-    public class PropertySchema
+    public class PropertySchema : DataIntegrationObject
     {
-        private int _id;
-        private string _name;
         private Dictionary<int, AttributeSchema> _attrschemas;
         private GameObjectSchema _gameobjsch;
         private bool _issummaryprop;
@@ -68,15 +66,6 @@ namespace Model
         }
 
         /// <summary>
-        /// The property schema id.
-        /// </summary>
-        public int Id
-        {
-            get { return _id; }
-            set { _id = value; }
-        }
-
-        /// <summary>
         /// Initializes all object fields.
         /// </summary>
         public void Initialize()
@@ -104,21 +93,6 @@ namespace Model
         public void Load()
         {
 
-        }
-
-        /// <summary>
-        /// The property schema name.
-        /// </summary>
-        public string Name
-        {
-            get { return _name; }
-            set
-            {
-                if (value != null && value.Length > 0)
-                {
-                    _name = value;
-                }
-            }
         }
     }
 }

@@ -56,7 +56,7 @@ namespace ModelTests
 
             try
             {
-                records = (SqlDataRecordset)dataIntegration.SendDataRequest("GetAllRecords", null);
+                records = (SqlDataRecordset)dataIntegration.SendDataRequest(DataIntegration.RecordType.AttributeItem, null);
                 if (records.Dataset.Tables.Count == 0)
                 {
                     Assert.Fail("No tables retrieved");

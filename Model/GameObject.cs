@@ -13,12 +13,10 @@ namespace Model
     /// then populate.  The aggregate of all defined and populated properties gives
     /// this object its full definition and game context.
     /// </summary>
-    public class GameObject
+    public class GameObject : DataIntegrationObject
     {
-        int _id;
         private GameObjectSchema _schema;
         private Dictionary<int, GameObjectProperty> _props;
-        private string _name;
 
         /// <summary>
         /// Instantiates a new game object using the specified game object
@@ -61,15 +59,6 @@ namespace Model
             Load();
         }
 
-        /// <summary>
-        /// The game object id.  Read only.
-        /// </summary>
-        public int Id
-        {
-            get { return _id; }
-            set { _id = value; }
-        }
-
         public Dictionary<int, GameObjectProperty> Properties
         {
             get { return _props; }
@@ -103,20 +92,6 @@ namespace Model
             foreach (GameObjectProperty prop in props)
             {
                 _props.Add(prop.Property.Id, prop);
-            }
-        }
-
-        /// <summary>
-        /// The game object name.
-        /// </summary>
-        public string Name
-        {
-            get { return _name; }
-            set { 
-                if (value != null && value.Length > 0)
-                {
-                    _name = value; 
-                }
             }
         }
     }

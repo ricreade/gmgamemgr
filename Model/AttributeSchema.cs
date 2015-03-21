@@ -12,10 +12,8 @@ namespace Model
     /// Provides the framework to define an attribute, which is a component of a
     /// PropertySchema.
     /// </summary>
-    public class AttributeSchema
+    public class AttributeSchema : DataIntegrationObject
     {
-        private int _id;
-        private string _name;
         private bool _isrequired;
         private int _multiplicity;
         private PropertySchema _propsch;
@@ -70,34 +68,6 @@ namespace Model
         public void Load()
         {
 
-        }
-
-        /// <summary>
-        /// The attribute schema id.
-        /// </summary>
-        public int Id
-        {
-            get { return _id; }
-            set {
-                Initialize();
-                _id = value;
-                Load();
-            }
-        }
-
-        /// <summary>
-        /// The attribute schema name.
-        /// </summary>
-        public string Name
-        {
-            get { return _name; }
-            set
-            {
-                if (value != null && value.Length > 0)
-                {
-                    _name = value;
-                }
-            }
         }
 
         /// <summary>

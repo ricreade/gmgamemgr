@@ -12,10 +12,8 @@ namespace Model
     /// objects must be based upon a game object schema as the schema gives
     /// all game objects their definition and context.
     /// </summary>
-    public class GameObjectSchema
+    public class GameObjectSchema : DataIntegrationObject
     {
-        private int _id;
-        private string _name;
         private Dictionary<int, GameObjectPropertySchema> _propschemas;
 
         public GameObjectSchema()
@@ -57,15 +55,6 @@ namespace Model
         }
 
         /// <summary>
-        /// The object id.
-        /// </summary>
-        public int Id
-        {
-            get { return _id; }
-            set { _id = value; }
-        }
-
-        /// <summary>
         /// Loads (or refreshes) the object properties from the database.
         /// </summary>
         public void Load()
@@ -83,21 +72,6 @@ namespace Model
             foreach (GameObjectPropertySchema prop in props)
             {
                 _propschemas.Add(prop.PropertySchema.Id, prop);
-            }
-        }
-
-        /// <summary>
-        /// The game object schema name.
-        /// </summary>
-        public string Name
-        {
-            get { return _name; }
-            set
-            {
-                if (value != null && value.Length > 0)
-                {
-                    _name = value;
-                }
             }
         }
 

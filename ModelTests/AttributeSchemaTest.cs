@@ -60,7 +60,7 @@ namespace ModelTests
 
             try
             {
-                records = (SqlDataRecordset)dataIntegration.SendDataRequest("GetAllRecords", null);
+                records = (SqlDataRecordset)dataIntegration.SendDataRequest(DataIntegration.RecordType.AttributeSchema, null);
                 if (records.Dataset.Tables.Count == 0)
                 {
                     Assert.Fail("No tables retrieved");
@@ -126,7 +126,7 @@ namespace ModelTests
 
             try
             {
-                records = (SqlDataRecordset)dataIntegration.SendDataRequest("AttributeSchema_Read", GetTestIdList(), 0);
+                records = (SqlDataRecordset)dataIntegration.SendDataRequest(SqlDataIntegration.RecordType.AttributeSchema, GetTestIdList(), 0);
                 if (records.Dataset.Tables.Count == 0)
                 {
                     Assert.Fail("No tables retrieved");
@@ -197,7 +197,7 @@ namespace ModelTests
             Schema.Multiplicity = 1;
             Schema.PropertySchema.Id = 1;
 
-            result = dataIntegration.SendActionRequest("AttributeSchema_Upsert", 
+            result = dataIntegration.SendActionRequest(SqlDataIntegration.RecordType.AttributeSchema, SqlDataIntegration.RequestType.Upsert, 
                 SqlRecordsetIntegration.ParameterizeAttributeSchema(Schema));
 
             Assert.IsTrue(result);

@@ -15,8 +15,19 @@ namespace Model.Data
     /// specific application object.  This class is intended as an
     /// abstraction of data provided from some record source.
     /// </summary>
-    public class SqlDataIntegration : IDataIntegration
+    public class SqlDataIntegration : DataIntegration
     {
+        private const string RECORDTYPE_ATTRITEM = "AttributeItem";
+        private const string RECORDTYPE_ATTRSCH = "AttributeSchema";
+        private const string RECORDTYPE_GAMEOBJ = "GameObject";
+        private const string RECORDTYPE_GAMEOBJSCH = "GameObjectSchema";
+        private const string RECORDTYPE_PROP = "Property";
+        private const string RECORDTYPE_PROPSCH = "PropertySchema";
+
+        private const string REQUESTTYPE_DELETE = "Delete";
+        private const string REQUESTTYPE_READ = "Read";
+        private const string REQUESTTYPE_UPSERT = "Upsert";
+
         string _connstr;
 
         /// <summary>
@@ -43,6 +54,74 @@ namespace Model.Data
         {
             Initialize();
             SetConnectionString(ConnectionString);
+        }
+
+        /// <summary>
+        /// Constructs a command string based on the type of record to affect and
+        /// the action to take.  This command string directly relates to a stored
+        /// procedure to invoke.
+        /// </summary>
+        /// <param name="Record">The type of record (table) to target.</param>
+        /// <param name="Request">The crud action to take.</param>
+        /// <returns>The name of the stored procedure to invoke.</returns>
+        private string BuildCommandString(RecordType Record, RequestType Request)
+        {
+            string comm = "";
+            switch (Record)
+            {
+                case RecordType.AttributeItem:
+                    comm = RECORDTYPE_ATTRITEM;
+                    break;
+                case RecordType.AttributeSchema:
+                    comm = RECORDTYPE_ATTRSCH;
+                    break;
+                case RecordType.GameObject:
+                    comm = RECORDTYPE_GAMEOBJ;
+                    break;
+                case RecordType.GameObjectSchema:
+                    comm = RECORDTYPE_GAMEOBJSCH;
+                    break;
+                case RecordType.Property:
+                    comm = RECORDTYPE_PROP;
+                    break;
+                case RecordType.PropertySchema:
+                    comm = RECORDTYPE_PROPSCH;
+                    break;
+            }
+            comm += "_";
+            switch (Request)
+            {
+                case RequestType.Delete:
+                    comm += REQUESTTYPE_DELETE;
+                    break;
+                case RequestType.Read:
+                    comm += REQUESTTYPE_READ;
+                    break;
+                case RequestType.Upsert:
+                    comm += REQUESTTYPE_UPSERT;
+                    break;
+            }
+
+            return comm;
+        }
+
+        /// <summary>
+        /// Returns a SqlDataRecord of 
+        /// </summary>
+        /// <param name="IdList"></param>
+        /// <returns></returns>
+        private IEnumerable<SqlDataRecord> BuildObjectIdEnumeration(IList<int> IdList)
+        {
+            SqlMetaData[] schema = new SqlMetaData[]{
+                new SqlMetaData("Id", SqlDbType.Int)
+            };
+            SqlDataRecord datarecord = new SqlDataRecord(schema);
+
+            foreach (int Id in IdList)
+            {
+                datarecord.SetInt32(0, Id);
+                yield return datarecord;
+            }
         }
 
         /// <summary>
@@ -80,7 +159,7 @@ namespace Model.Data
         /// this method on an initialized object will prevent it from functioning until
         /// the SetConnectionString method is called again.
         /// </summary>
-        public void Initialize()
+        public override void Initialize()
         {
             _connstr = "";
         }
@@ -94,7 +173,7 @@ namespace Model.Data
         /// <param name="Command">The name of the sql database stored procedure to call.</param>
         /// <param name="Args">The array of parameter arguments to pass to the procedure.</param>
         /// <returns>True if the request affected any records, otherwise false.</returns>
-        public bool SendActionRequest(string Command, IDataParameter[] Args)
+        public override bool SendActionRequest(RecordType Record, RequestType Request, IDataParameter[] Args)
         {
             SqlParameter outParam;
             using (SqlConnection conn = new SqlConnection(_connstr))
@@ -102,7 +181,7 @@ namespace Model.Data
                 try
                 {
                     conn.Open();
-                    SqlCommand comm = ConfigureCommand(conn, Command, Args);
+                    SqlCommand comm = ConfigureCommand(conn, BuildCommandString(Record, Request), Args);
 
                     outParam = new SqlParameter("@Output", SqlDbType.Int);
                     outParam.Direction = ParameterDirection.ReturnValue;
@@ -122,21 +201,8 @@ namespace Model.Data
             }
         }
 
-        private IEnumerable<SqlDataRecord> BuildObjectIdEnumeration(IList<int> IdList)
-        {
-            SqlMetaData[] schema = new SqlMetaData[]{
-                new SqlMetaData("Id", SqlDbType.Int)
-            };
-            SqlDataRecord datarecord = new SqlDataRecord(schema);
 
-            foreach (int Id in IdList)
-            {
-                datarecord.SetInt32(0, Id);
-                yield return datarecord;
-            }
-        }
-
-        public IDataRecordset SendDataRequest(string Command, IDataParameter[] Args, int a)
+        public IDataRecordset SendDataRequest(RecordType Record, IDataParameter[] Args, int a)
         {
             DataSet dataset;
             IList<int> idlist = (IList<int>)Args[0].GetValue();
@@ -147,7 +213,7 @@ namespace Model.Data
                     conn.Open();
                     dataset = new DataSet();
                     SqlCommand comm = conn.CreateCommand();
-                    comm.CommandText = Command;
+                    comm.CommandText = BuildCommandString(Record, SqlDataIntegration.RequestType.Read);
                     comm.CommandType = CommandType.StoredProcedure;
                     SqlParameter param = new SqlParameter();
                     param.ParameterName = "@idList";
@@ -180,7 +246,7 @@ namespace Model.Data
         /// <param name="Command">The name of the sql database stored procedure to call.</param>
         /// <param name="Args">The array of parameter arguments to pass to the procedure.</param>
         /// <returns>A dataset containing the retrieved records.</returns>
-        public IDataRecordset SendDataRequest(string Command, IDataParameter[] Args)
+        public override IDataRecordset SendDataRequest(RecordType Record, IDataParameter[] Args)
         {
             DataSet dataset;
             string[] tablenames = new string[] { "AttributeSchemas", "Attributes" };
@@ -190,7 +256,7 @@ namespace Model.Data
                 try
                 {
                     conn.Open();
-                    SqlCommand comm = ConfigureCommand(conn, Command, Args);
+                    SqlCommand comm = ConfigureCommand(conn, BuildCommandString(Record, RequestType.Read), Args);
                     SqlDataAdapter adapter = new SqlDataAdapter(comm);
                     dataset = new DataSet();
                     adapter.Fill(dataset);
@@ -237,7 +303,7 @@ namespace Model.Data
         /// data source.</param>
         /// <returns>True if the connection succeeded.  If the connection fails, an
         /// exception is thrown.</returns>
-        public bool SetConnectionString(string ConnectionString)
+        public override bool SetConnectionString(string ConnectionString)
         {
             _connstr = ConnectionString;
             using (SqlConnection conn = new SqlConnection(ConnectionString))

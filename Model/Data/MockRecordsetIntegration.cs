@@ -123,5 +123,10 @@ namespace Model.Data
         {
             throw new NotImplementedException();
         }
+
+        public override void RetrieveUserRecords(User User)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

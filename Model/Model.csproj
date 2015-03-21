@@ -49,7 +49,10 @@
     <Compile Include="AttributeSchema.cs" />
     <Compile Include="DataArgumentList.cs" />
     <Compile Include="DataConnector.cs" />
+    <Compile Include="DataIntegrationObject.cs" />
+    <Compile Include="Data\DataIntegration.cs" />
     <Compile Include="Data\IDataParameter.cs" />
+    <Compile Include="Data\IntegrationObject.cs" />
     <Compile Include="Data\IRecordsetIntegration.cs" />
     <Compile Include="Data\MockDataRecordset.cs" />
     <Compile Include="Data\MockRecordsetIntegration.cs" />
@@ -68,6 +71,7 @@
     <Compile Include="Property.cs" />
     <Compile Include="PropertySchema.cs" />
     <Compile Include="Scripting.cs" />
+    <Compile Include="User.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

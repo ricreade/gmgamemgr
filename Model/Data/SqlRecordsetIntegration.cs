@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Model.Data
 {
-    /// <summary>
+    /// <remarks>
     /// A sql-driven implementation of a recordset integration.  The data source
     /// (the results of a database query) is used to hydrate and return the 
     /// specified object.
-    /// </summary>
+    /// </remarks>
     public class SqlRecordsetIntegration : RecordsetIntegration
     {
 
@@ -24,6 +24,25 @@ namespace Model.Data
         /// used to hydrate all data objects.</param>
         public SqlRecordsetIntegration(SqlDataRecordset Recordset) : base(Recordset)
         {
+            Initialize();
+        }
+
+        /// <summary>
+        /// Initializes the integration with the specified data integration
+        /// that will be used to retrieve records from the data source to
+        /// hydrate all data objects.
+        /// </summary>
+        /// <param name="Integration">The data integration used to obtain records
+        /// from the data source.</param>
+        /// <exception cref="ArgumentNullException">If the integration object
+        /// reference is null.</exception>
+        public SqlRecordsetIntegration(SqlDataIntegration Integration)
+            : base(Integration)
+        {
+            if (Integration == null)
+            {
+                throw new ArgumentNullException("Data Integration object cannot be null.");
+            }
             Initialize();
         }
 
@@ -420,6 +439,20 @@ namespace Model.Data
                 new SqlDataParameter("@Multiplicity",       Schema.Multiplicity),
                 new SqlDataParameter("@PropertySchemaId",   Schema.PropertySchema.Id)
             };
+        }
+
+        /// <summary>
+        /// Retrieves all records for the specified user.  Records in the database
+        /// are organized under the top-level GameObject.  All GameObjects for the
+        /// user are retrieved, then all properties and attributes (and their
+        /// associated schemas) that support those GameObjects.  This method is
+        /// intended to support application initialization by loading relevant
+        /// records into memory.
+        /// </summary>
+        /// <param name="User">The user for whom records should be obtained.</param>
+        public override void RetrieveUserRecords(User User)
+        {
+            throw new NotImplementedException();
         }
     }
 }

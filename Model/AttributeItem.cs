@@ -12,9 +12,9 @@ namespace Model
     /// An attribute that helps define a game object property.  This class must
     /// be able to support both numeric and string value types.
     /// </summary>
-    public class AttributeItem
+    public class AttributeItem : DataIntegrationObject
     {
-        private int _id;
+
         private AttributeSchema _schema;
         private string _value;
         private Property _prop;
@@ -28,12 +28,6 @@ namespace Model
         {
             _schema = Schema;
             
-        }
-
-        public int Id
-        {
-            get { return _id; }
-            set { _id = value; }
         }
 
         public void Initialize()

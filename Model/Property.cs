@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Model
 {
-    public class Property
+    public class Property : DataIntegrationObject
     {
-        private int _id;
-        private string _name;
         private PropertySchema _schema;
         private Dictionary<int, AttributeItem> _attrs;
         private int _gameobjid;
@@ -79,30 +77,6 @@ namespace Model
         {
             get { return _gameobjid; }
             set { _gameobjid = value; }
-        }
-
-        /// <summary>
-        /// The property object id.
-        /// </summary>
-        public int Id
-        {
-            get { return _id; }
-            set { _id = value; }
-        }
-
-        /// <summary>
-        /// The property name;
-        /// </summary>
-        public string Name
-        {
-            get { return _name; }
-            set
-            {
-                if (value != null && value.Length > 0)
-                {
-                    _name = value;
-                }
-            }
         }
 
         /// <summary>
